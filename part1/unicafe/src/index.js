@@ -2,7 +2,12 @@ import React, { useState } from 'react'
 import ReactDOM from 'react-dom'
 
 const Title = (props) => <h1>{props.value}</h1>
-const Statistic = ({name, value}) => <div>{name}: {value}</div>
+const Statistic = ({name, value}) => ( 
+  <tr>
+    <td>{name}</td>
+    <td>{value}</td>
+  </tr>
+)
 const Button = (props) => (
   <button onClick={props.handleClick}>
     {props.text}
@@ -20,13 +25,16 @@ const Statistics = (props) => {
   }
   else{
     return(
-      <div>
-      <Statistic name = {"good"} value = {props.good} />
-      <Statistic name = {"netural"} value = {props.neutral} />
-      <Statistic name = {"bad"} value = {props.bad} />
-      <Statistic name = {"avergae"} value = {(props.good+props.bad*(-1))/props.all} />
-      <Statistic name = {"positive"} value = {props.good/props.all*100+' %'} />
-      </div>
+        <table>
+          <tbody>
+            <Statistic name = {"good"} value = {props.good} />
+            <Statistic name = {"netural"} value = {props.neutral} />
+            <Statistic name = {"bad"} value = {props.bad} />
+            <Statistic name = {"all"} value = {props.all} />
+            <Statistic name = {"avergae"} value = {(props.good+props.bad*(-1))/props.all} />
+            <Statistic name = {"positive"} value = {props.good/props.all*100+' %'} />
+          </tbody>
+        </table>
     )
   }
 }
