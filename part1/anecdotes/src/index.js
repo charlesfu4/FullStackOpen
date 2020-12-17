@@ -21,8 +21,12 @@ const TopAnecdote = (props) =>{
   const maxidx = props.vote.indexOf(Math.max(...props.vote))
   if(props.vote[maxidx] === 0)
     return <div>Not yet have vote statistics.</div>
-  else
-    return <div>{anecdotes[maxidx]}</div>
+  else{
+    if(props.vote[maxidx] <=1)
+      return <div>{anecdotes[maxidx]}<br></br>{"has " +props.vote[maxidx]+" vote"}</div>
+    else if(props.vote[maxidx] > 1)
+      return <div>{anecdotes[maxidx]}<br></br>{"has " +props.vote[maxidx]+" votes"}</div>
+  }
 }
 
 const App = (props) => {
