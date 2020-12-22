@@ -5,8 +5,8 @@ const Country = ({name, capital, pop, languages, url}) =>{
   return (
     <div>
         <h1>{name}</h1>
-        <div>{capital}</div>
-        <div>{pop}</div>
+        <div>Capital: {capital}</div>
+        <div>Population: {pop}</div>
         <h2>Languages</h2>
         <ul>
           {languages.map(language =>
