@@ -1,7 +1,8 @@
 import React from 'react'
 import Language from './Language'
+import Weather from './Weather'
 
-const Country = ({name, capital, pop, languages, url}) =>{
+const Country = ({name, capital, pop, languages, url, apikey}) =>{
   return (
     <div>
         <h1>{name}</h1>
@@ -14,6 +15,9 @@ const Country = ({name, capital, pop, languages, url}) =>{
           )}
         </ul>
         <img width="15%" height="15%" src={url} alt=""></img>
+        <div>
+          <Weather apikey={apikey} loc={name} />
+        </div>
     </div>
   )
 }

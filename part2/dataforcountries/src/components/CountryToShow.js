@@ -2,7 +2,7 @@ import React from 'react'
 import CountryList from './CountryList'
 import Country from './Country'
 
-const CountryToShow = ({countryList, setFilter}) => {
+const CountryToShow = ({countryList, setFilter, apikey}) => {
     const len = countryList.length
 
     if(len >10)
@@ -19,7 +19,8 @@ const CountryToShow = ({countryList, setFilter}) => {
        const single = countryList[0]
       return(<div>
         {<Country name={single.name} capital={single.capital}
-        pop={single.population} languages={single.languages} url={single.flag}/>}
+        pop={single.population} languages={single.languages} url={single.flag}
+        apikey={apikey} />}
         </div>
       )
     }

@@ -4,6 +4,7 @@ import CountryToShow from './components/CountryToShow'
 import Filter from './components/Filter'
 
 const App = () => {
+  const api_key = process.env.REACT_APP_API_KEY
   const [countries, SetCounties] = useState([])
   const [newFilter, SetNewFilter] = useState('')
 
@@ -32,7 +33,7 @@ const App = () => {
   return(
     <div>
       <Filter handleFilterChange={handleFilterChange} />
-      <CountryToShow countryList={countryList} setFilter={SetNewFilter} />
+      <CountryToShow countryList={countryList} setFilter={SetNewFilter} apikey={api_key} />
     </div>
   )
 

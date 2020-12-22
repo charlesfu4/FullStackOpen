@@ -6,7 +6,11 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 In the project directory, you can run:
 
-### `npm start`
+``` bash 
+REACT_APP_API_KEY={Your api key} npm start // For Linux/macOS Bash
+($env:REACT_APP_API_KEY={Your api key}) -and (npm start) // For Windows PowerShell
+set REACT_APP_API_KEY={Your api key} && npm start // For Windows cmd.exe 
+``` 
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
