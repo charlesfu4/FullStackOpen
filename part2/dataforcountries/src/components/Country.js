@@ -13,7 +13,7 @@ const Country = ({name, capital, pop, languages, url}) =>{
             <Language key={language.id} name={language.name}/>
           )}
         </ul>
-        <img width="110" height="110" src={url}></img>
+        <img width="15%" height="15%" src={url}></img>
     </div>
   )
 }
