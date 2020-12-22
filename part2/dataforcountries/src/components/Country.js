@@ -1,4 +1,4 @@
-import react from 'react'
+import React from 'react'
 import Language from './Language'
 
 const Country = ({name, capital, pop, languages, url}) =>{
@@ -10,10 +10,10 @@ const Country = ({name, capital, pop, languages, url}) =>{
         <h2>Languages</h2>
         <ul>
           {languages.map(language =>
-            <Language key={language.id} name={language.name}/>
+            <Language key={language.name} name={language.name}/>
           )}
         </ul>
-        <img width="15%" height="15%" src={url}></img>
+        <img width="15%" height="15%" src={url} alt=""></img>
     </div>
   )
 }
