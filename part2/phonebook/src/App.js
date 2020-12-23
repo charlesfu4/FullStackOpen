@@ -30,8 +30,11 @@ const App = () => {
         date: new Date().toISOString(),
         number: newNumber
       }
-
-      setPersons(persons.concat(personObj))
+    axios
+      .post('http://localhost:3001/persons', personObj)
+      .then(response =>{
+        setPersons(persons.concat(personObj))
+    })
     }
     setNewName('')
     setNewNum('')
