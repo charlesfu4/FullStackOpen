@@ -1,8 +1,8 @@
-import axios from 'axios'
 import React, { useState, useEffect} from 'react'
 import Person from './components/Person'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
+import personService from './services/persons'
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
@@ -12,12 +12,16 @@ const App = () => {
 
   useEffect(()=>{
     console.log('effect')
-    axios
-    .get('http://localhost:3001/persons')
-    .then(response => 
-      setPersons(response.data)
+    personService
+    .getAll()
+    .then(allPersons => 
+      setPersons(allPersons)
     )
   },[])
+
+  const personToShow = persons.filter(person => person.name
+    .toLowerCase()
+    .includes(newFilter.toLowerCase()))
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -25,22 +29,28 @@ const App = () => {
       alert(`${newName} is already added to phonebook`)
     else{
       const personObj = {
-        id: persons.length+1,
         name: newName,
-        date: new Date().toISOString(),
         number: newNumber
       }
-    axios
-      .post('http://localhost:3001/persons', personObj)
-      .then(response =>{
-        setPersons(persons.concat(personObj))
-    })
+      personService
+        .create(personObj)
+        .then(newPerson =>{
+          setPersons(persons.concat(newPerson))
+      })
     }
     setNewName('')
     setNewNum('')
   }
-
-  const personToShow = persons.filter(person => person.name.includes(newFilter))
+  
+  const deletePerson = (id) => {
+    const person = persons.find(p => p.id === id)
+    const filteredPersons = persons.filter(person => person.id !== id)
+    if (window.confirm(`Do you really want to delete ${person.name}?`)){
+      personService
+      .del(id)
+      .then(() => setPersons(filteredPersons))
+    }
+  }
   
   const handleNameChange = (event) =>
     setNewName(event.target.value)
@@ -62,8 +72,9 @@ const App = () => {
 
       <h2>Numbers</h2>
       <div>
-        {personToShow.map(person =>
-          <Person key={person.name} person={person} />
+        {personToShow.map((person, i) =>
+          <Person key={i} person={person} 
+          del={() => deletePerson(person.id)} />
         )}
       </div>
     </div>
