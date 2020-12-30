@@ -11,15 +11,15 @@ const Phone = mongoose.model('Phonebook', phoneBookSchema)
 
 const password = process.argv[2]
 
-const url = 
+const url =
 `mongodb+srv://fullstack:${password}@cluster0.y8jrq.mongodb.net/phonebook?retryWrites=true&w=majority`
 
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
 
 if (process.argv.length === 3) {
-  Phone.find({}).then(result =>{
-    console.log("Phonebook:")
-    result.forEach(phoneData =>{
+  Phone.find({}).then(result => {
+    console.log('Phonebook:')
+    result.forEach(phoneData => {
       console.log(`${phoneData.name} ${phoneData.number}`)
     })
     mongoose.connection.close()
@@ -38,6 +38,6 @@ else if(process.argv.length === 5){
   })
 }
 else{
-  console.log("Please provide either 3 or 5 argument for this app.")
+  console.log('Please provide either 3 or 5 argument for this app.')
   process.exit(1)
 }

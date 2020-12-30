@@ -3,7 +3,7 @@ const express = require('express')
 const dateformat = require('dateformat')
 const morgan = require('morgan')
 const app = express()
-const Person = require('./models/person') 
+const Person = require('./models/person')
 
 app.use(express.json())
 app.use(express.static('build'))
@@ -14,54 +14,54 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :b
 
 
 // GET all persons ex3.1
-app.get('/api/persons', (req, res, next) =>{
-  Person.find({}).then(phoneData =>{
+app.get('/api/persons', (req, res, next) => {
+  Person.find({}).then(phoneData => {
     res.json(phoneData)
   })
-  .catch(error=>{next(error)})
+    .catch(error => {next(error)})
 })
 
 app.get('/info', (req, res, next) => {
-  Person.count({}, (error, count) =>{
+  Person.count({}, (error, count) => {
     const time = new Date()
-    res.send(`Phone book has info of ${count} people.<br>`+ 
+    res.send(`Phone book has info of ${count} people.<br>`+
     dateformat(time, 'dddd mmmm dS yyyy h:MM:ss TT Z'))
-  }) 
-  .catch(error=>{next(error)})
+  })
+    .catch(error => {next(error)})
 })
 
-app.get('/api/persons/:id', (req, res, next) =>{
+app.get('/api/persons/:id', (req, res, next) => {
   Person.findById(req.params.id)
-  .then(phoneData=>{
-    if(phoneData) res.json(phoneData)
-    else res.status(404).end()
-  })
-  .catch(error=>(next(error)))
+    .then(phoneData => {
+      if(phoneData) res.json(phoneData)
+      else res.status(404).end()
+    })
+    .catch(error => (next(error)))
 })
 
 // DELETE persons by id ex3.4
 app.delete('/api/persons/:id', (req, res, next) => {
   Person.findByIdAndRemove(req.params.id)
-  .then(result=>{
-    res.status(204).end()
-  })
-  .catch(error=>{next(error)})
+    .then(() => {
+      res.status(204).end()
+    })
+    .catch(error => {next(error)})
 })
 
 
 // name already exists
-app.put('/api/persons/:id', (req, res, next) =>{
+app.put('/api/persons/:id', (req, res, next) => {
   const body = req.body
   const person = {
     name : body.name,
     number : body.number
   }
-  
-  Person.findByIdAndUpdate(req.params.id, person, {new:true, runValidators:true, context : 'query'})
-  .then(updatedPerson =>{
-    res.json(updatedPerson)
-  })
-  .catch(error=>{next(error)})
+
+  Person.findByIdAndUpdate(req.params.id, person, { new:true, runValidators:true, context : 'query' })
+    .then(updatedPerson => {
+      res.json(updatedPerson)
+    })
+    .catch(error => {next(error)})
 })
 
 // new name
@@ -78,10 +78,10 @@ app.post('/api/persons', (req, res, next) => {
     number: body.number,
   })
 
-  person.save().then(savePerson =>{
+  person.save().then(savePerson => {
     res.json(savePerson)
   })
-  .catch(error => {next(error)})
+    .catch(error => {next(error)})
 
 })
 
@@ -105,8 +105,8 @@ const errorHandler = (error, req, res, next) => {
 
 app.use(errorHandler)
 
-const PORT = process.env.PORT 
-app.listen(PORT, () =>{
+const PORT = process.env.PORT
+app.listen(PORT, () => {
   console.log(`Server is running on ${PORT}`)
 })
 

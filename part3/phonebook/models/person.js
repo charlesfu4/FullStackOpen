@@ -6,12 +6,12 @@ const url = process.env.MONGODB_URI
 console.log('connecting to', url)
 
 mongoose.connect(url, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
-  .then(result => {
+  .then(() => {
     console.log('connected to MongoDB')
   })
   .catch((error) => {
     console.log('error connecting to MongoDB:', error.message)
-})
+  })
 
 const phoneBookSchema = new mongoose.Schema({
   name: {
@@ -29,7 +29,7 @@ const phoneBookSchema = new mongoose.Schema({
 phoneBookSchema.plugin(uniqueValidator)
 
 phoneBookSchema.set('toJSON', {
-  transform : (doc, returnedObj) =>{
+  transform : (doc, returnedObj) => {
     returnedObj.id = returnedObj._id.toString()
     delete returnedObj._id
     delete returnedObj.__v
