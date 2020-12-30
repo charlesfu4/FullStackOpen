@@ -54,7 +54,7 @@ const App = () => {
         })
         .catch(error => {
           const mesg = {
-            content: `The data of ${newName} has been deleted by other users`,
+            content: error.response.data,
             status: false
           } 
           setUpdateMessage(mesg)
@@ -77,6 +77,13 @@ const App = () => {
             status: true 
           } 
           setUpdateMessage(mesg)
+      })
+      .catch(error => {
+        const mesg = {
+          content:error.response.data,
+          status:false
+        }
+        setUpdateMessage(mesg)
       })
     }
     setNewName('')
