@@ -1,7 +1,9 @@
+require('dotenv').config()
 const express = require('express')
 const dateformat = require('dateformat')
 const morgan = require('morgan')
 const app = express()
+const Person = require('./models/person') 
 
 app.use(express.json())
 app.use(express.static('build'))
@@ -11,95 +13,97 @@ morgan.token('body', req => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 
-let persons = [
-  { 
-    name: "Arto Hellas", 
-    number: "040-123456",
-    id: 1
-  },
-  { 
-    name: "Ada Lovelace", 
-    number: "39-44-5323523",
-    id: 2
-  },
-  { 
-    name: "Dan Abramov", 
-    number: "12-43-234345",
-    id: 3
-  },
-  { 
-    name: "Mary Poppendieck", 
-    number: "39-23-6423122",
-    id: 4
-  }
-]
-
-console.log("Hello World")
-
 // GET all persons ex3.1
-app.get('/api/persons', (request, response) =>{
-  response.json(persons)
+app.get('/api/persons', (req, res, next) =>{
+  Person.find({}).then(phoneData =>{
+    res.json(phoneData)
+  })
+  .catch(error=>{next(error)})
 })
 
-// GET information ex3.2
-app.get('/info', (request, response) => {
-  const info = persons.length 
-  const time = new Date()
-  response.send(`Phone book has info of ${info} people.<br>`+ 
-  dateformat(time, 'dddd mmmm dS yyyy h:MM:ss TT Z'))
+app.get('/info', (req, res, next) => {
+  Person.count({}, (error, count) =>{
+    const time = new Date()
+    res.send(`Phone book has info of ${count} people.<br>`+ 
+    dateformat(time, 'dddd mmmm dS yyyy h:MM:ss TT Z'))
+  }) 
+  .catch(error=>{next(error)})
 })
-// GET person by id ex3.3
-app.get('/api/persons/:id', (req, res) =>{
-  const id = Number(req.params.id)
-  console.log(id)
-  const person = persons.find(p => p.id === id) 
 
-  if(person)
-    res.json(person)
-  else
-    res.status(404).end()
+app.get('/api/persons/:id', (req, res, next) =>{
+  Person.findById(req.params.id)
+  .then(phoneData=>{
+    if(phoneData) res.json(phoneData)
+    else res.status(404).end()
+  })
+  .catch(error=>(next(error)))
 })
 
 // DELETE persons by id ex3.4
-app.delete('/api/persons/:id', (req, res) => {
-  const id = Number(req.params.id)
-  persons = persons.filter(p => p.id !== id)
-
-  res.status(204).end()
+app.delete('/api/persons/:id', (req, res, next) => {
+  Person.findByIdAndRemove(req.params.id)
+  .then(result=>{
+    res.status(204).end()
+  })
+  .catch(error=>{next(error)})
 })
 
-// POST new person ex3.5-3.6
-const getRandomId = (max) => {
-  return Math.floor(Math.random() * Math.floor(max));
-}
 
+// name already exists
+app.put('/api/persons/:id', (req, res, next) =>{
+  const body = req.body
+  const person = {
+    name : body.name,
+    number : body.number
+  }
+  
+  Person.findByIdAndUpdate(req.params.id, person, {new:true})
+  .then(updatedPerson =>{
+    res.json(updatedPerson)
+  })
+  .catch(error=>{next(error)})
+})
+
+// new name
 app.post('/api/persons', (req, res) => {
   const body = req.body
-  console.log(body)
-  // name or number is missing
   if(!body.name || !body.number){
     return res.status(400).json({
       error: 'content missing'
     })
   }
-  // name already exists
-  if(persons.find(p => p.name === body.name)){
-    return res.status(400).json({
-      error: 'name repeated!'
-    })
-  }
-  const person = {
+
+  const person = new Person({
     name: body.name,
     number: body.number,
-    id: getRandomId(99999),
-  }
+  })
 
-  persons = persons.concat(person)
+  person.save().then(savePerson =>{
+    res.json(savePerson)
+  })
 
-  res.json(person)
 })
 
-const PORT = process.env.PORT || 3001
+const unknownEndpoint = (req, res) => {
+  res.status(404).send({ error: 'unknown endpoint' })
+}
+
+// handler of requests with unknown endpoint
+app.use(unknownEndpoint)
+
+const errorHandler = (error, req, res, next) => {
+  console.error(error.message)
+
+  if (error.name === 'CastError') {
+    return res.status(400).send({ error: 'malformatted id' })
+  } 
+
+  next(error)
+}
+
+app.use(errorHandler)
+
+const PORT = process.env.PORT 
 app.listen(PORT, () =>{
   console.log(`Server is running on ${PORT}`)
 })

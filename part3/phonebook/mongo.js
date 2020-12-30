@@ -37,3 +37,7 @@ else if(process.argv.length === 5){
     mongoose.connection.close()
   })
 }
+else{
+  console.log("Please provide either 3 or 5 argument for this app.")
+  process.exit(1)
+}

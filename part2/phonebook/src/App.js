@@ -47,18 +47,18 @@ const App = () => {
           person: newPerson))
           console.log(persons)
           const mesg = {
-            content: `Added ${newPerson.name}`,
+            content: `Updated ${newPerson.name}`,
             status: true 
           } 
           setUpdateMessage(mesg)
         })
         .catch(error => {
           const mesg = {
-            content: `Information of ${changedPerson.name} has been removed from the server.`,
+            content: `The data of ${newName} has been deleted by other users`,
             status: false
           } 
           setUpdateMessage(mesg)
-          setPersons(persons.filter(person => person.id !== changedPerson.id))
+          setPersons(persons.filter(person => person.name !== newName))
         })
       }
     }
@@ -72,7 +72,11 @@ const App = () => {
         .then(newPerson =>{
           setPersons(persons.concat(newPerson))
           console.log(newPerson)
-          setUpdateMessage(`Added ${newPerson.name}`)
+          const mesg = {
+            content: `Added ${newPerson.name}`,
+            status: true 
+          } 
+          setUpdateMessage(mesg)
       })
     }
     setNewName('')
