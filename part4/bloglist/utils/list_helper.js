@@ -18,12 +18,8 @@ const favoriteBlog = (blogs) => {
   }
   if(blogs.length === 0) return undefined
   const favBlogOrg = blogs.reduce(reducer)
-  let favBlog = {}
-  favBlog.title = favBlogOrg.title
-  favBlog.author = favBlogOrg.author
-  favBlog.likes = favBlogOrg.likes
-  console.log(favBlog)
-  return favBlog 
+  // eslint-disable-next-line no-undef
+  return ( { title, author, likes } = favBlogOrg, { title, author, likes })
 }
 
 module.exports = {
