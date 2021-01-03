@@ -1,3 +1,5 @@
+const lodash = require('lodash')
+
 const dummy = () => {
   return 1
 }
@@ -22,8 +24,31 @@ const favoriteBlog = (blogs) => {
   return ( { title, author, likes } = favBlogOrg, { title, author, likes })
 }
 
+const mostBlogs = (blogs) => {
+  if(blogs.length === 0) return undefined
+  const extract = lodash.map(lodash
+    .orderBy(lodash
+      .groupBy(blogs, blog => blog.author), arr => arr.length, 'desc')[0], 'author')
+  return {
+    author:extract[0],
+    blogs:extract.length
+  }
+}
+
+const mostLikes = (blogs) => {
+  if(blogs.length === 0) return undefined
+  return lodash.orderBy(lodash.map(lodash.groupBy(blogs, 'author') , (group, author) => {
+    return {
+      author: author,
+      likes: lodash.sumBy(group, 'likes')
+    }
+  }), 'likes', 'desc')[0]
+}
+
 module.exports = {
   dummy,
   totalLikes,
-  favoriteBlog
+  favoriteBlog,
+  mostBlogs,
+  mostLikes
 }
