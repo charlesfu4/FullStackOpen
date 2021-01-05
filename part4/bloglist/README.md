@@ -1,6 +1,6 @@
 # Getting Started with node.js backend 
 
-Before start the backend, configure your own `.env` files as follow
+Before starting the backend, configure your own `.env` files as follow
 ```
 MONGODB_URI=mongodb+srv://fullstack:${YOUR_MONGODB_PASSWORD}@${YOUR_MONGODB_URL}.mongodb.net/note-app?retryWrites=true
 PORT=3001
@@ -16,4 +16,4 @@ To run the test defined under `/test/`, simply run
 
 ### `npm test`
 ### `npm test -- ${TEST_PATH}`
-### `npm test -- -t 'TEST_NAME'
+### `npm test -- -t 'TEST_NAME`
