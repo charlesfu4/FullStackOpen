@@ -6,19 +6,19 @@ const initialBlogs = [
     title: 'HTML is easy',
     author: 'James Ting',
     url: 'www.google.com',
-    likes: 8
+    likes: 8,
   },
   {
     title: 'Cool guys dont eat',
     author: 'Hou Ting',
     url: 'www.dog.com',
-    likes: 5
+    likes: 5,
   },
   {
     title: 'The secret of pasta',
     author: 'James Chao',
     url: 'www.cat.com',
-    likes: 1
+    likes: 1,
   }
 ]
 
