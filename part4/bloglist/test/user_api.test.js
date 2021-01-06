@@ -31,7 +31,6 @@ describe('On creation of new user with invalid inputs', () => {
 
     expect(result.body.error).toContain('shorter than the minimum allowed length')
     const usersAtEnd = await helper.usersInDb()
-    console.log(usersAtEnd)
     expect(usersAtEnd).toHaveLength(helper.initialUsers.length)
   })
 

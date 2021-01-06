@@ -34,13 +34,16 @@ describe('when there is initially some notes saved', () => {
   })
 })
 
-describe('addition of new blogs', () => {
+describe('addition of new blogs with existing user', () => {
   test('add a blog post by POST and the number of total blogs increase by one', async () => {
+    const existedUsers = await helper.usersInDb()
+
     const newBlog = {
       title:'dog is a good dog',
       author: 'Martin',
       url: 'www.king.com',
-      likes: 999
+      likes: 999,
+      userId: existedUsers[0]._id
     }
 
     await api
@@ -57,10 +60,13 @@ describe('addition of new blogs', () => {
   })
 
   test('like will be default set to 0', async () => {
+    const existedUsers = await helper.usersInDb()
+
     const newBlog = {
       title:'Blog without likes is new',
       author: 'Dimono',
       url: 'www.kobe.com',
+      userId: existedUsers[0]._id
     }
 
     await api
@@ -74,8 +80,11 @@ describe('addition of new blogs', () => {
   })
 
   test('blog missing title and url response code 400', async () => {
+    const existedUsers = await helper.usersInDb()
+
     const newBlog = {
       author: 'Dimono',
+      userId: existedUsers[0]._id
     }
 
     await api
@@ -111,6 +120,8 @@ describe('deletion of a note', () => {
 
 describe('update of a note', () => {
   test('update likes of a specific blog post', async () => {
+    const existedUsers = await helper.usersInDb()
+
     const blogsAtStart = await helper.blogsInDb()
     const blogToUpdate = blogsAtStart[0]
     const blogId = blogToUpdate.id
@@ -118,7 +129,8 @@ describe('update of a note', () => {
       title: blogToUpdate.title,
       author: blogToUpdate.author,
       url: blogToUpdate.url,
-      likes: 100
+      likes: 100,
+      userId: existedUsers[0]._id
     }
 
     await api
