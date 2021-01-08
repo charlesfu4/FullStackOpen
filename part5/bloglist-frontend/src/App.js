@@ -10,12 +10,15 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   const [loggedin, setLoggedin] = useState(false)
+  const [title, setTitle] = useState('')
+  const [author, setAuthor] = useState('')
+  const [url, setUrl] = useState('')
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
     )  
-  }, [])
+  }, [blogs])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
@@ -46,8 +49,29 @@ const App = () => {
     }
   }
 
+  // add new blog by blogservice create
+  const addBlog = async (event) => {
+    event.preventDefault()
+
+    const newBlog = {
+      title: title,
+      author: author,
+      url: url
+    }
+    try{
+      const returnedBlog = await blogService.create(newBlog)
+      console.log(returnedBlog)
+      blogs.concat(returnedBlog)
+      setTitle('')
+      setAuthor('')
+      setUrl('')
+    } catch(exception) {
+      console.log(exception)
+    }
+  }
+
   // handle logout request
-  const handleLogout = async event => {
+  const handleLogout = event => {
     setUser(null)
     setLoggedin(false)
     window.localStorage.removeItem('loggedBloglistUser')
@@ -57,8 +81,11 @@ const App = () => {
     <div>
       {user === null ?
        <LoginForm handleLogin={handleLogin} setUsername={setUsername} setPassword={setPassword}
-       username={username} password={password} /> :
-       <BlogList user={user} blogs={blogs} handleLogout={handleLogout} /> 
+       username={username} password={password} /> : 
+       <div>
+        <BlogList user={user} blogs={blogs} handleLogout={handleLogout} addBlog={addBlog} setTitle={setTitle} setAuthor={setAuthor} setUrl={setUrl}
+          title={title} author={author} url={url}/> 
+       </div>
       }
     </div>
   )
