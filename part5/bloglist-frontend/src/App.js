@@ -83,7 +83,7 @@ const App = () => {
 
   // togglable blog form with a ref to togglevisibility 
   const blogForm = () => (
-    <Togglable buttonLabel='new blog' ref={blogFromRef}>
+    <Togglable forwardButton={'create new blog'} backButton={'cancel'} ref={blogFromRef}>
       <BlogForm createBlog={addBlog} />
     </Togglable>
   )
