@@ -21,15 +21,15 @@ const App = () => {
       setBlogs(getBlogs)
     }
     getAllBlogs()
-    }, [])
+  }, [])
 
   useEffect(() => {
-      const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
-      if(loggedUserJSON) {
-        const user = JSON.parse(loggedUserJSON)
-        setUser(user)
-        blogService.setToken(user.token)
-      }
+    const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
+    if(loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON)
+      setUser(user)
+      blogService.setToken(user.token)
+    }
   }, [])
 
 
@@ -44,7 +44,7 @@ const App = () => {
       })
       window.localStorage.setItem(
         'loggedBloglistUser', JSON.stringify(user)
-      ) 
+      )
       blogService.setToken(user.token)
       setUser(user)
       setUsername('')
@@ -82,7 +82,7 @@ const App = () => {
   const updateBlog = async (blogObj, id) => {
     try{
       const returnedBlog = await blogService.update(blogObj, id)
-      setBlogs(blogs.map(blog => blog.id !== id ? 
+      setBlogs(blogs.map(blog => blog.id !== id ?
         blog : returnedBlog))
     } catch(exception) {
       setMessage({ content: exception, error: true })
@@ -107,12 +107,12 @@ const App = () => {
   }
 
   // handle logout request
-  const handleLogout = event => {
+  const handleLogout = () => {
     setUser(null)
     window.localStorage.removeItem('loggedBloglistUser')
   }
 
-  // togglable blog form with a ref to togglevisibility 
+  // togglable blog form with a ref to togglevisibility
   const blogForm = () => (
     <Togglable forwardButton={'create new blog'} backButton={'cancel'} ref={blogFromRef}>
       <BlogForm createBlog={addBlog} />
@@ -122,24 +122,24 @@ const App = () => {
   return (
     <div>
       {message !== null &&  <Notification message={message} />}
-            {user === null ?
-       <LoginForm 
-         handleLogin={handleLogin} 
-         setUsername={setUsername} 
-         setPassword={setPassword}
-         username={username} 
-         password={password} 
-        /> : 
-       <div>
-        <BlogHeader user={user} handleOnClick={handleLogout} />
-        {blogForm()}
-        <BlogList 
-          user={user}
-          updateBlog={updateBlog} 
-          deleteBlog={deleteBlog} 
-          blogs={blogs} 
-        /> 
-       </div>
+      {user === null ?
+        <LoginForm
+          handleLogin={handleLogin}
+          setUsername={setUsername}
+          setPassword={setPassword}
+          username={username}
+          password={password}
+        /> :
+        <div>
+          <BlogHeader user={user} handleOnClick={handleLogout} />
+          {blogForm()}
+          <BlogList
+            user={user}
+            updateBlog={updateBlog}
+            deleteBlog={deleteBlog}
+            blogs={blogs}
+          />
+        </div>
       }
     </div>
   )

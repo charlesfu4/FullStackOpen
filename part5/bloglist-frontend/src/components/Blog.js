@@ -1,7 +1,6 @@
 import React from 'react'
-const Blog = ({blog, handleUpdateOnClick}) => {
 
-  return(
+const Blog = ({ blog, handleUpdateOnClick }) => (
   <div>
     <div>{blog.url}</div>
     <div>
@@ -10,6 +9,5 @@ const Blog = ({blog, handleUpdateOnClick}) => {
     </div>
   </div>
 )
-}
 
 export default Blog
