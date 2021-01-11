@@ -70,7 +70,24 @@ const App = () => {
         setMessage(null)
       }, 3000)
     } catch(exception) {
-      console.log(exception)
+      setMessage({ content: exception, error: true })
+      setTimeout(() => {
+        setMessage(null)
+      }, 3000)
+    }
+  }
+
+  // update blog by blogservice update
+  const updateBlog = async (blogObj, id) => {
+    try{
+      const returnedBlog = await blogService.update(blogObj, id)
+      setBlogs(blogs.map(blog => blog.id !== id ? 
+        blog : returnedBlog))
+    } catch(exception) {
+      setMessage({ content: exception, error: true })
+      setTimeout(() => {
+        setMessage(null)
+      }, 3000)
     }
   }
 
@@ -102,7 +119,7 @@ const App = () => {
        <div>
         <BlogHeader user={user} handleOnClick={handleLogout} />
         {blogForm()}
-        <BlogList blogs={blogs} createBlog={addBlog} /> 
+        <BlogList updateBlog={updateBlog} blogs={blogs} /> 
        </div>
       }
     </div>
