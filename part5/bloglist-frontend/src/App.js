@@ -13,23 +13,24 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [loggedin, setLoggedin] = useState(false)
   const [message, setMessage] = useState(null)
 
   useEffect(() => {
-    blogService.getAll().then(blogs =>
-      setBlogs( blogs )
-    )  
-  }, [blogs])
+    const getAllBlogs = async () => {
+      const getBlogs = await blogService.getAll()
+      setBlogs(getBlogs)
+    }
+    getAllBlogs()
+    }, [])
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
-    if(loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      blogService.setToken(user.token)
-    }
-  }, [loggedin])
+      const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
+      if(loggedUserJSON) {
+        const user = JSON.parse(loggedUserJSON)
+        setUser(user)
+        blogService.setToken(user.token)
+      }
+  }, [])
 
 
   const blogFromRef = useRef() // blog form ref to the togglable component
@@ -44,8 +45,8 @@ const App = () => {
       window.localStorage.setItem(
         'loggedBloglistUser', JSON.stringify(user)
       ) 
+      blogService.setToken(user.token)
       setUser(user)
-      setLoggedin(true)
       setUsername('')
       setPassword('')
     } catch(exception) {
@@ -61,7 +62,7 @@ const App = () => {
     try{
       blogFromRef.current.toggleVisibility()
       const returnedBlog = await blogService.create(blogObj)
-      blogs.concat(returnedBlog)
+      setBlogs(blogs.concat(returnedBlog))
       setMessage({
         content: `a new blog ${returnedBlog.title}. by ${returnedBlog.author} added`,
         error: false
@@ -91,10 +92,23 @@ const App = () => {
     }
   }
 
+  // remove blog by blogservice delete
+  const deleteBlog = async (id) => {
+    try{
+      const remainedBlogs = blogs.filter(blog => blog.id !== id)
+      await blogService.remove(id)
+      setBlogs(remainedBlogs)
+    } catch(exception) {
+      setMessage({ content: exception, error: true })
+      setTimeout(() => {
+        setMessage(null)
+      }, 3000)
+    }
+  }
+
   // handle logout request
   const handleLogout = event => {
     setUser(null)
-    setLoggedin(false)
     window.localStorage.removeItem('loggedBloglistUser')
   }
 
@@ -119,7 +133,12 @@ const App = () => {
        <div>
         <BlogHeader user={user} handleOnClick={handleLogout} />
         {blogForm()}
-        <BlogList updateBlog={updateBlog} blogs={blogs} /> 
+        <BlogList 
+          user={user}
+          updateBlog={updateBlog} 
+          deleteBlog={deleteBlog} 
+          blogs={blogs} 
+        /> 
        </div>
       }
     </div>

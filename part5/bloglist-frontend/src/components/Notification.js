@@ -7,11 +7,10 @@ const Notification = ({message}) => {
     else if(message.error){
       return (
         <div className='error'>
-          {message.content}
+          {JSON.stringify(message.content)}
         </div>
       )
     }
-  
     else{
       return (
         <div className='note'>
