@@ -1,6 +1,5 @@
 import React, { useRef } from 'react'
 import Blog from './Blog'
-import Togglable from './Togglable'
 
 const BlogList = ({ user, updateBlog, deleteBlog, blogs }) => {
   const removeRef = useRef()
@@ -38,16 +37,16 @@ const BlogList = ({ user, updateBlog, deleteBlog, blogs }) => {
   ))
 
   return(
-    <div>
+    <div className='listedBlogs'>
       {sortedBlogs.map((blog, i) =>
         <div key={i} className='blogBlock'>
-          <Togglable succintInfo={`${blog.title} ${blog.author}`} forwardButton={'view'} backButton={'hide'} ref={removeRef}>
-            <Blog
-              blog={blog}
-              handleUpdateOnClick={() => updateLikes(blog.id)}
-            />
-            {removeButton(blog)}
-          </Togglable>
+          <Blog
+            blog={blog}
+            handleUpdateOnClick={() => updateLikes(blog.id)}
+            ref={removeBlog}
+          />
+          <div>{blog.user.username}</div>
+          {removeButton(blog)}
         </div>
       )}
     </div>

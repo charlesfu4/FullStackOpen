@@ -32,7 +32,7 @@ const Togglable = React.forwardRef((props, ref) => {
 
   return (
     <div>
-      <div style={hideWhenVisible}>
+      <div style={hideWhenVisible} className='togglableContentDefault'>
         {props.succintInfo} <button onClick={toggleVisibility}>{props.forwardButton}</button>
       </div>
       {fullVisibility()}

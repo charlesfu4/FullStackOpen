@@ -1,6 +1,6 @@
 import React from 'react'
 
-const BlogHeader = ({user, handleOnClick}) => (
+const BlogHeader = ({ user, handleOnClick }) => (
   <div>
     <h1>blogs</h1>
     <p>
