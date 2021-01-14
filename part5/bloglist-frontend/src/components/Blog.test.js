@@ -5,6 +5,8 @@ import Blog from './Blog'
 
 describe('<Blog />', () => {
   let component
+  const mockHandler = jest.fn()
+
 
   beforeEach(() => {
     const testBlogs = {
@@ -14,11 +16,10 @@ describe('<Blog />', () => {
       likes: 911911911
     }
     component = render(
-      <Blog blog={testBlogs} handleUpdateOnClick={jest.fn()} />
+      <Blog blog={testBlogs} handleUpdateOnClick={mockHandler} />
     )
   })
   test('renders content with only title and author by default', () => {
-
     const div = component.container.querySelector('.togglableContent div:not([style*="display: none;"])')
     // console.log(prettyDOM(div))
     expect(div).toHaveTextContent('test-title')
@@ -37,5 +38,13 @@ describe('<Blog />', () => {
     expect(div).toHaveTextContent('test-author')
     expect(div).toHaveTextContent('test-url')
     expect(div).toHaveTextContent(911911911)
+  })
+
+  test('like button click twice,  the event handler the component received as props is called twice', () => {
+    const button = component.getByText('like')
+    fireEvent.click(button)
+    fireEvent.click(button)
+
+    expect(mockHandler.mock.calls).toHaveLength(2)
   })
 })
