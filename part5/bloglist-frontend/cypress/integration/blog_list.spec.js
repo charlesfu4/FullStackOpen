@@ -23,5 +23,16 @@ describe('Blog app', function() {
       cy.contains('blogs')
     })
 
+    it('fail with incorrect credentials', function() {
+      cy.contains('login').click()
+      cy.getBySel('username').type('Ting')
+      cy.getBySel('password').type('wrongofcourse')
+      cy.getBySel('login-button').click()
+
+      cy.getBySel('error-noti').contains('Wrong username or password')
+      cy.getBySel('error-noti').should('have.css', 'color', 'rgb(255, 0, 0)')
+      
+    })
+
   })
 })
