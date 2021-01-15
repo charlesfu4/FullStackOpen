@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 const LoginForm = ({ handleLogin, setUsername,
   setPassword, username, password }) => (
-  <form onSubmit={handleLogin}>
+  <form onSubmit={handleLogin} data-cy='loginform'>
     <h1>Log in to application</h1>
     <div>
       username
