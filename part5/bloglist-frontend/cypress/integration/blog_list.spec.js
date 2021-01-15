@@ -142,10 +142,10 @@ describe('Blog app', function() {
     })
 
     it('blogs are ordered according to the likes', function() {
-      cy.getBySelLike('blog-like').then(likes => {
-        expect(likes[0]).to.contain(3)
-        expect(likes[2]).to.contain(2)
-        expect(likes[4]).to.contain(1)
+      cy.getBySelLike('blog-list').then(blogs => {
+        cy.wrap(blogs[0]).contains('title3')
+        cy.wrap(blogs[1]).contains('title2')
+        cy.wrap(blogs[2]).contains('title1')
       })
     })
   })

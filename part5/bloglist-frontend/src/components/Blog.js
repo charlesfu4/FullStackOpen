@@ -11,7 +11,7 @@ const Blog = ({ blog, handleUpdateOnClick }) => (
       <div>
         <div>{blog.url}</div>
         <div data-cy='blog-likes'>
-          <span data-cy='blog-like'>{blog.likes}</span>
+          {blog.likes}
           <button onClick={handleUpdateOnClick} data-cy='like-button'>like</button>
         </div>
       </div>
