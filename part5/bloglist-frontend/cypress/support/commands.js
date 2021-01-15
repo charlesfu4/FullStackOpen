@@ -45,3 +45,15 @@ Cypress.Commands.add('logout', () => {
   localStorage.removeItem('loggedBloglistUser')
   cy.visit('http://localhost:3000')
 })
+
+Cypress.Commands.add('createBlog', ({ title, author, likes, url }) => {
+  cy.request({
+    url: 'http://localhost:3001/api/blogs',
+    method: 'POST',
+    body: { title, author, likes, url },
+    headers: {
+      'Authorization': `bearer ${JSON.parse(localStorage.getItem('loggedBloglistUser')).token}`
+    }
+  })
+  cy.visit('http://localhost:3000')
+})

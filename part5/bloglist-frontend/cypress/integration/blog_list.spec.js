@@ -41,7 +41,7 @@ describe('Blog app', function() {
     })
   })
 
-  describe.only('When logged in', function() {
+  describe('When logged in', function() {
     // bypassing the login UI
     beforeEach(function() {
       cy.login({username:'ccfu', password:'iamcharlesfu'})
@@ -63,11 +63,12 @@ describe('Blog app', function() {
 
     it('User can like a blog(likes will be updated accordingly to number of clicks)', function() {
       // create one blog
-      cy.contains('create new blog').click()
-      cy.getBySel('title-input').type('test-title')
-      cy.getBySel('author-input').type('test-author')
-      cy.getBySel('url-input').type('test-url')
-      cy.getBySel('create-blog-button').click()
+      cy.createBlog({
+        title: 'test-title',
+        author: 'test-author',
+        likes: 0,
+        url: 'test-url'
+      })
 
       // press the view and then like button twice 
       cy.getBySel('blog-list').contains('view').click()
@@ -80,11 +81,12 @@ describe('Blog app', function() {
     describe('remove operations', function() {
       it('User who create the blog can delete it', function(){
         // create one blog
-        cy.contains('create new blog').click()
-        cy.getBySel('title-input').type('test-title')
-        cy.getBySel('author-input').type('test-author')
-        cy.getBySel('url-input').type('test-url')
-        cy.getBySel('create-blog-button').click()
+        cy.createBlog({
+          title: 'test-title',
+          author: 'test-author',
+          likes: 0,
+          url: 'test-url'
+        })
         // press the view and then like button twice 
         cy.getBySel('blog-list').contains('view').click()
         cy.getBySel('remove-button').click()
@@ -98,11 +100,12 @@ describe('Blog app', function() {
 
       it('User who did not create the blog cannot delete it', function(){
         // create one blog
-        cy.contains('create new blog').click()
-        cy.getBySel('title-input').type('test-title')
-        cy.getBySel('author-input').type('test-author')
-        cy.getBySel('url-input').type('test-url')
-        cy.getBySel('create-blog-button').click()
+        cy.createBlog({
+          title: 'test-title',
+          author: 'test-author',
+          likes: 0,
+          url: 'test-url'
+        })
         // press the logout and login as another user
         cy.logout()
         cy.login({username:'pmfm', password:'iampaula'})
@@ -110,6 +113,39 @@ describe('Blog app', function() {
         // press view and remove is not avalible
         cy.getBySel('blog-list').contains('view').click()
         cy.getBySel('blog-list').should('not.contain', 'remove')
+      })
+    })
+
+  })
+  describe.only('sort blogs', function() {
+    beforeEach(function() {
+      cy.login({username:'ccfu', password:'iamcharlesfu'})
+      cy.createBlog({
+        title: 'test-title2',
+        author: 'test-author2',
+        likes: 2,
+        url: 'test-url2'
+      })
+      cy.createBlog({
+        title: 'test-title1',
+        author: 'test-author1',
+        likes: 1,
+        url: 'test-url1'
+      })
+      cy.createBlog({
+        title: 'test-title3',
+        author: 'test-author3',
+        likes: 3,
+        url: 'test-url3'
+      })
+      cy.visit('http://localhost:3000')
+    })
+
+    it('blogs are ordered according to the likes', function() {
+      cy.getBySelLike('blog-like').then(likes => {
+        expect(likes[0]).to.contain(3)
+        expect(likes[2]).to.contain(2)
+        expect(likes[4]).to.contain(1)
       })
     })
   })
