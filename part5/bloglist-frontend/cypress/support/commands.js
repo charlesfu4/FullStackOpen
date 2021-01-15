@@ -31,3 +31,17 @@ Cypress.Commands.add("getBySel", (selector, ...args) => {
 Cypress.Commands.add("getBySelLike", (selector, ...args) => {
   return cy.get(`[data-cy*=${selector}]`, ...args);
 });
+
+Cypress.Commands.add('login', ({ username, password }) => {
+  cy.request('POST', 'http://localhost:3001/api/login', {
+    username, password
+  }).then(({ body }) => {
+    localStorage.setItem('loggedBloglistUser', JSON.stringify(body))
+    cy.visit('http://localhost:3000')
+  })
+})
+
+Cypress.Commands.add('logout', () => {
+  localStorage.removeItem('loggedBloglistUser')
+  cy.visit('http://localhost:3000')
+})

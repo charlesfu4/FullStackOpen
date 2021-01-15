@@ -1,19 +1,18 @@
 import React from 'react'
 import Togglable from './Togglable'
 
-const Blog = ({ blog, handleUpdateOnClick, ref }) => (
+const Blog = ({ blog, handleUpdateOnClick }) => (
   <div className='singleBlog'>
     <Togglable
       succintInfo={`${blog.title} ${blog.author}`}
       forwardButton={'view'}
       backButton={'hide'}
-      ref={ref}
     >
       <div>
         <div>{blog.url}</div>
-        <div>
+        <div data-cy='blog-likes'>
           {blog.likes}
-          <button onClick={handleUpdateOnClick}>like</button>
+          <button onClick={handleUpdateOnClick} data-cy='like-button'>like</button>
         </div>
       </div>
     </Togglable>

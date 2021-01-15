@@ -1,8 +1,7 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import Blog from './Blog'
 
 const BlogList = ({ user, updateBlog, deleteBlog, blogs }) => {
-  const removeRef = useRef()
 
   // change the blog likes by pressing the like button
   const updateLikes = async (id) => {
@@ -19,7 +18,6 @@ const BlogList = ({ user, updateBlog, deleteBlog, blogs }) => {
   const removeBlog = async (id) => {
     const targetedBlog = blogs.find(blog => blog.id === id)
     if (window.confirm(`Remove blog ${targetedBlog.title}. by ${targetedBlog.author}`)) {
-      removeRef.current.toggleVisibility()
       deleteBlog(id)
     }
   }
@@ -27,7 +25,7 @@ const BlogList = ({ user, updateBlog, deleteBlog, blogs }) => {
   // determine if remove button will appear
   const removeButton = (targetedBlog) => {
     return user.username === targetedBlog.user.username ?
-      <button onClick={() => removeBlog(targetedBlog.id)}>remove</button>:
+      <button onClick={() => removeBlog(targetedBlog.id)} data-cy='remove-button'>remove</button>:
       null
   }
 
@@ -37,13 +35,12 @@ const BlogList = ({ user, updateBlog, deleteBlog, blogs }) => {
   ))
 
   return(
-    <div className='listedBlogs'>
+    <div className='listedBlogs' data-cy='blog-list'>
       {sortedBlogs.map((blog, i) =>
         <div key={i} className='blogBlock'>
           <Blog
             blog={blog}
             handleUpdateOnClick={() => updateLikes(blog.id)}
-            ref={removeBlog}
           />
           <div>{blog.user.username}</div>
           {removeButton(blog)}
