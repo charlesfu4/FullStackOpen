@@ -29,10 +29,10 @@ const App = () => {
 
   return (
     <div>
-      <button onClick={good}>good</button> 
-      <button onClick={ok}>neutral</button> 
-      <button onClick={bad}>bad</button>
-      <button onClick={zero}>reset stats</button>
+      <button onClick={() => good()}>good</button> 
+      <button onClick={() => ok()}>neutral</button> 
+      <button onClick={() => bad()}>bad</button>
+      <button onClick={() => zero()}>reset stats</button>
       <div>good {store.getState().good}</div>
       <div>neutral {store.getState().ok}</div>
       <div>bad {store.getState().bad}</div>
