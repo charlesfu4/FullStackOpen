@@ -1,0 +1,19 @@
+{
+  "anecdotes": [
+    {
+      "content": "the app state is in redux store",
+      "votes": 0,
+      "id": 1
+    },
+    {
+      "content": "state changes are made with actions",
+      "votes": 12,
+      "id": 2
+    },
+    {
+      "content": "dog is best",
+      "votes": 0,
+      "id": 3
+    }
+  ]
+}
