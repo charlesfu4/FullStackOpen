@@ -5,7 +5,10 @@ import { timeoutNotificaiton, voteNotification } from '../reducers/notificationR
 
 const AnecdoteList = () => {
   const dispatch = useDispatch()
-  const anecdotes = useSelector(state => state.anecdotes.sort((a, b) => b.votes - a.votes))
+  const anecdotes = useSelector(({anecdotes, filter}) => {
+    const sorted = anecdotes.sort((a, b) => b.votes - a.votes)
+    return  sorted.filter(anecdote => anecdote.content.toLowerCase().includes(filter.toLowerCase()))
+  })
 
   const vote = ({id, content}) => {
     dispatch(voteFor(id))

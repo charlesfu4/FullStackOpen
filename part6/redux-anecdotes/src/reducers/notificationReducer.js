@@ -7,30 +7,29 @@ const reducer = (state = null, action) => {
     case 'VOTE_NOTI':
       return action.notification 
     case 'TIMEOUT_NOTI':
-      return action.notification
+      return null 
     default:
       return state
   }
 }
 
-export const addNotification = (notification) => {
+export const addNotification = (content) => {
   return {
     type: 'NEW_NOTI',
-    notification: `'${notification}' is added`
+    notification: `'${content}' is added`
   }
 }
 
-export const voteNotification = (notification) => {
+export const voteNotification = (content) => {
   return {
     type: 'VOTE_NOTI',
-    notification: `you voted to '${notification}'`
+    notification: `you voted to '${content}'`
   }
 }
 
 export const timeoutNotificaiton = () => {
   return {
     type: 'TIMEOUT_NOTI',
-    notification: null
   }
 }
 
