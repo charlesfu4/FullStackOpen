@@ -4,8 +4,6 @@ const reducer = (state = null, action) => {
   switch (action.type) {
     case 'NEW_NOTI':
       return action.notification 
-    case 'VOTE_NOTI':
-      return action.notification 
     case 'TIMEOUT_NOTI':
       return null 
     default:
@@ -13,17 +11,15 @@ const reducer = (state = null, action) => {
   }
 }
 
-export const addNotification = (content) => {
-  return {
-    type: 'NEW_NOTI',
-    notification: `'${content}' is added`
-  }
-}
-
-export const voteNotification = (content) => {
-  return {
-    type: 'VOTE_NOTI',
-    notification: `you voted to '${content}'`
+export const addNotification = (content, second = 5) => {
+  return async dispatch => {
+    await dispatch({
+      type: 'NEW_NOTI',
+      notification: content
+    })
+    setTimeout(() => {
+      return dispatch (timeoutNotificaiton(null))
+    }, second*1000)
   }
 }
 

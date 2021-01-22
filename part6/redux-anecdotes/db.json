@@ -7,7 +7,7 @@
     },
     {
       "content": "state changes are made with actions",
-      "votes": 12,
+      "votes": 16,
       "id": 2
     },
     {
@@ -19,6 +19,11 @@
       "content": "dog is my best freind",
       "votes": 0,
       "id": 4
+    },
+    {
+      "content": "I like to become software master",
+      "votes": 0,
+      "id": 5
     }
   ]
 }
