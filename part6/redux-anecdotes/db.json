@@ -2,12 +2,12 @@
   "anecdotes": [
     {
       "content": "the app state is in redux store",
-      "votes": 0,
+      "votes": 1,
       "id": 1
     },
     {
       "content": "state changes are made with actions",
-      "votes": 16,
+      "votes": 18,
       "id": 2
     },
     {
@@ -24,6 +24,11 @@
       "content": "I like to become software master",
       "votes": 0,
       "id": 5
+    },
+    {
+      "content": "i want to win a job",
+      "votes": 1,
+      "id": 6
     }
   ]
 }
