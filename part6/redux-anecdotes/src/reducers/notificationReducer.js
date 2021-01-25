@@ -10,6 +10,7 @@ const reducer = (state = null, action) => {
       return state
   }
 }
+
 let timeoutId
 export const addNotification = (content, second = 5) => {
   if(timeoutId !== null)
