@@ -10,15 +10,17 @@ const reducer = (state = null, action) => {
       return state
   }
 }
-
+let timeoutId
 export const addNotification = (content, second = 5) => {
+  if(timeoutId !== null)
+    clearTimeout(timeoutId)
   return async dispatch => {
     await dispatch({
       type: 'NEW_NOTI',
       notification: content
     })
-    setTimeout(() => {
-      return dispatch (timeoutNotificaiton(null))
+    timeoutId = setTimeout(() => {
+        return dispatch(timeoutNotificaiton(null))
     }, second*1000)
   }
 }
