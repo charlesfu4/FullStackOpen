@@ -8,14 +8,33 @@ import {
   useHistory,
 } from "react-router-dom"
 
+const padding = {
+  paddingRight: 5
+}
+const divpadding = {
+  paddingBottom: 15
+}
+
+const Anecdote = ({ anecdote }) => (
+  <div>
+    <h3>{anecdote.content}</h3>
+    <div style={divpadding}>{`has ${anecdote.votes} votes`}</div>
+    <div style={divpadding}>{`for more information see `}<a href={anecdote.info}>{anecdote.info}</a></div>
+  </div>
+)
+
 const AnecdoteList = ({ anecdotes }) => (
   <div>
     <h2>Anecdotes</h2>
     <ul>
-      {anecdotes.map(anecdote => <li key={anecdote.id} >{anecdote.content}</li>)}
+      {anecdotes.map(anecdote => 
+      <li key={anecdote.id} >
+        <Link to={`/anecdotes/${anecdote.id}`}>{anecdote.content}</Link>
+      </li>)}
     </ul>
   </div>
 )
+
 
 const About = () => (
   <div>
@@ -43,16 +62,19 @@ const CreateNew = (props) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
+  const history = useHistory()
 
 
   const handleSubmit = (e) => {
     e.preventDefault()
+    
     props.addNew({
       content,
       author,
       info,
       votes: 0
     })
+    history.push('/')
   }
 
   return (
@@ -95,15 +117,16 @@ const App = () => {
     }
   ])
 
-  const [notification, setNotification] = useState('')
+  const [notification, setNotification] = useState(null)
 
-  const padding = {
-    paddingRight: 5
-  }
 
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
     setAnecdotes(anecdotes.concat(anecdote))
+    setNotification(`${anecdote.content} has been created`)
+    setTimeout(() => {
+      setNotification(null)
+    }, 10000)
   }
 
   const anecdoteById = (id) =>
@@ -120,16 +143,24 @@ const App = () => {
     setAnecdotes(anecdotes.map(a => a.id === id ? voted : a))
   }
 
+  const match = useRouteMatch('/anecdotes/:id')
+  const anecdote = match
+    ? anecdotes.find(anecdote => Number(anecdote.id) === Number(match.params.id))
+    : null
+
   return (
     <div>
-      <div>
+      <h1>Software anecdotes</h1>
+      <div style={divpadding}>
         <Link style={padding} to="/">anecdotes</Link>
         <Link style={padding} to="/create">create new</Link>
         <Link style={padding} to="/about">about</Link>
       </div>
-
-      <h1>Software anecdotes</h1>
+      <div style={divpadding}>{notification}</div>
       <Switch>
+        <Route path="/anecdotes/:id">
+          <Anecdote anecdote={anecdote}/>
+        </Route>
         <Route path="/create">
           <CreateNew addNew={addNew} />
         </Route>
