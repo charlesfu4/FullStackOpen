@@ -34,6 +34,7 @@ const App = () => {
   const fetch = (e) => {
     e.preventDefault()
     setName(nameInput.value)
+    nameInput.onReset()
   }
 
   return (

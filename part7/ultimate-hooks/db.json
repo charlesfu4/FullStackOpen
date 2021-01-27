@@ -1,0 +1,62 @@
+{
+  "notes": [
+    {
+      "content": "custom-hookit aivan mahtavia",
+      "id": 1
+    },
+    {
+      "content": "paras feature ikinä <3",
+      "id": 2
+    },
+    {
+      "content": "wow soo cool",
+      "id": 3
+    },
+    {
+      "content": "wow is woow",
+      "id": 4
+    }
+  ],
+  "persons": [
+    {
+      "name": "mluukkai",
+      "number": "040-5483923",
+      "id": 1
+    },
+    {
+      "name": "dsa",
+      "number": "wow",
+      "id": 2
+    },
+    {
+      "name": "dsa",
+      "number": "d111",
+      "id": 3
+    },
+    {
+      "name": "dsa",
+      "number": "d111",
+      "id": 4
+    },
+    {
+      "name": "dog",
+      "number": "123-321",
+      "id": 5
+    },
+    {
+      "name": "ping",
+      "number": "dog",
+      "id": 6
+    },
+    {
+      "name": "king is king",
+      "number": "01-321-321",
+      "id": 7
+    },
+    {
+      "name": "dog",
+      "number": "123-3213'",
+      "id": 8
+    }
+  ]
+}
