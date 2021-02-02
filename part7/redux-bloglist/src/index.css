@@ -1,0 +1,27 @@
+.error{
+  color: red;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+.note{
+  color: green;
+  background: lightgrey;
+  font-size: 20px;
+  border-style: solid;
+  border-radius: 5px;
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.blogBlock{
+  color: black;
+  font-size: 15px;
+  border-style: solid;
+  border-radius: 2px;
+  padding: 5px;
+  margin-bottom: 2px;
+}
