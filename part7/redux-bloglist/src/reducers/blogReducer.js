@@ -24,11 +24,46 @@ export const createBlog = (blogObj) => {
   }
 }
 
+export const delBlog = (id) => {
+  return async dispatch => {
+    try{
+      await blogService.remove(id)
+      const remainedBlogs = await blogService.getAll()
+      console.log(remainedBlogs)
+      dispatch({
+        type: 'DEL_BLOG',
+        data: remainedBlogs 
+      })
+    } catch(exception){
+      return exception
+    }
+  }
+}
+
+export const updateBlog = (newBlog, id) => {
+  return async dispatch => {
+    try{
+      await blogService.update(newBlog, id)
+      const updatedBlogs = await blogService.getAll() 
+      dispatch({
+        type: 'UPDATE_BLOG',
+        data: updatedBlogs
+      })
+    } catch(exception){
+      return exception
+    }
+  }
+} 
+
 const reducer = (state=[], action) => {
   switch (action.type) {
     case 'NEW_BLOG':
       return [...state, action.data]
     case 'INIT_BLOG':
+      return action.data
+    case 'DEL_BLOG':
+      return action.data 
+    case 'UPDATE_BLOG':
       return action.data
     default:
       return state

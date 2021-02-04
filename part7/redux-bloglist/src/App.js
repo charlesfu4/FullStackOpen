@@ -13,7 +13,6 @@ import { useDispatch } from 'react-redux'
 
 const App = () => {
   const dispatch = useDispatch()
-  const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
@@ -54,40 +53,6 @@ const App = () => {
     }
   }
 
-  /*
-  // add new blog by blogservice create
-  const addBlog = async (blogObj) => {
-    try{
-      blogFromRef.current.toggleVisibility()
-      dispatch(createBlog(blogObj))
-      dispatch(addNotification(`a new blog ${returnedBlog.title}. by ${returnedBlog.author} added`, false, 5))
-    } catch(exception) {
-      dispatch(addNotification(exception, true, 5))
-    }
-  }
-  */
-
-  // update blog by blogservice update
-  const updateBlog = async (blogObj, id) => {
-    try{
-      const returnedBlog = await blogService.update(blogObj, id)
-      setBlogs(blogs.map(blog => blog.id !== id ?
-        blog : returnedBlog))
-    } catch(exception) {
-      dispatch(addNotification(exception, true, 5))
-    }
-  }
-
-  // remove blog by blogservice delete
-  const deleteBlog = async (id) => {
-    try{
-      const remainedBlogs = blogs.filter(blog => blog.id !== id)
-      await blogService.remove(id)
-      setBlogs(remainedBlogs)
-    } catch(exception) {
-      addNotification(exception, true, 5)
-    }
-  }
 
   // handle logout request
   const handleLogout = () => {
@@ -116,12 +81,7 @@ const App = () => {
         <div>
           <BlogHeader user={user} handleOnClick={handleLogout} />
           {blogForm()}
-          <BlogList
-            user={user}
-            updateBlog={updateBlog}
-            deleteBlog={deleteBlog}
-            blogs={blogs}
-          />
+          <BlogList user={user} />
         </div>
       }
     </div>
