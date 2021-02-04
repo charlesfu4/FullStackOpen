@@ -1,9 +1,12 @@
 import React from 'react'
 import Blog from './Blog'
+import { useSelector } from 'react-redux'
 
-const BlogList = ({ user, updateBlog, deleteBlog, blogs }) => {
-
+const BlogList = ({ user, updateBlog, deleteBlog }) => {
   // change the blog likes by pressing the like button
+  const blogs = useSelector(state => state.blogs)
+  const sortedBlogs = useSelector(state => state.blogs.sort((a,b) => b.likes - a.likes))
+
   const updateLikes = async (id) => {
     const targetedBlog = blogs.find(blog => blog.id === id)
     console.log(targetedBlog)
@@ -29,10 +32,7 @@ const BlogList = ({ user, updateBlog, deleteBlog, blogs }) => {
       null
   }
 
-  // sort blogs according to their likes, DESC
-  const sortedBlogs = blogs.sort((a,b) => (
-    b.likes - a.likes
-  ))
+
 
   return(
     <div className='listedBlogs' data-cy='blog-list'>
@@ -50,5 +50,6 @@ const BlogList = ({ user, updateBlog, deleteBlog, blogs }) => {
 
   )
 }
+
 
 export default BlogList

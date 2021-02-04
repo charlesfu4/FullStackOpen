@@ -8,6 +8,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import BlogHeader from './components/BlogHeader'
 import { addNotification } from './reducers/notificationReducer'
+import { initializeBlogs } from './reducers/blogReducer'
 import { useDispatch } from 'react-redux'
 
 const App = () => {
@@ -18,12 +19,8 @@ const App = () => {
   const [user, setUser] = useState(null)
 
   useEffect(() => {
-    const getAllBlogs = async () => {
-      const getBlogs = await blogService.getAll()
-      setBlogs(getBlogs)
-    }
-    getAllBlogs()
-  }, [])
+    dispatch(initializeBlogs())
+  }, [dispatch])
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBloglistUser')
@@ -57,17 +54,18 @@ const App = () => {
     }
   }
 
+  /*
   // add new blog by blogservice create
   const addBlog = async (blogObj) => {
     try{
       blogFromRef.current.toggleVisibility()
-      const returnedBlog = await blogService.create(blogObj)
-      setBlogs(blogs.concat(returnedBlog))
+      dispatch(createBlog(blogObj))
       dispatch(addNotification(`a new blog ${returnedBlog.title}. by ${returnedBlog.author} added`, false, 5))
     } catch(exception) {
       dispatch(addNotification(exception, true, 5))
     }
   }
+  */
 
   // update blog by blogservice update
   const updateBlog = async (blogObj, id) => {
@@ -87,7 +85,7 @@ const App = () => {
       await blogService.remove(id)
       setBlogs(remainedBlogs)
     } catch(exception) {
-      dispatch(addNotification(exception, true, 5))
+      addNotification(exception, true, 5)
     }
   }
 
@@ -100,7 +98,7 @@ const App = () => {
   // togglable blog form with a ref to togglevisibility
   const blogForm = () => (
     <Togglable forwardButton={'create new blog'} backButton={'cancel'} ref={blogFromRef}>
-      <BlogForm createBlog={addBlog} />
+      <BlogForm />
     </Togglable>
   )
 
