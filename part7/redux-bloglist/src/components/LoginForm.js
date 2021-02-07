@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../reducers/userReducer' 
+import { addNotification } from '../reducers/notificationReducer'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
 
@@ -22,10 +23,9 @@ const LoginForm = () => {
       )
       blogService.setToken(user.token)
       dispatch(setUser(user))
-      // dispatch(addNotification(`User ${user} logged in`, false, 5))
+      dispatch(addNotification(`User ${user.name} logged in`, false, 5))
     } catch(exception) {
-      console.log('Wrong username or password')
-      // dispatch(addNotification('Wrong username or password', true, 5))
+      dispatch(addNotification('Wrong username or password', true, 5))
     }
   }
 

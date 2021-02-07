@@ -24,14 +24,10 @@ export const addNotification = (content, error, second = 5) => {
       error: error 
     })
     timeoutId = setTimeout(() => {
-      return dispatch(timeoutNotification)
+       dispatch({
+        type: 'TIMEOUT_NOTI'
+      })
     }, second*1000)
-  }
-}
-
-export const timeoutNotification = () => {
-  return {
-    type: 'TIMEOUT_NOTI'
   }
 }
 

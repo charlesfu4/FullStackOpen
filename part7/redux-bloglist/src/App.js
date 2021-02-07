@@ -6,8 +6,8 @@ import Togglable from './components/Togglable'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import BlogHeader from './components/BlogHeader'
-import { addNotification } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
+import { addNotification } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from './reducers/userReducer'
 
@@ -26,13 +26,14 @@ const App = () => {
       dispatch(setUser(user))
       blogService.setToken(user.token)
     }
-  }, [])
+  }, [dispatch])
 
 
   const blogFromRef = useRef() // blog form ref to the togglable component
 
   // handle logout request
   const handleLogout = () => {
+    dispatch(addNotification(`${user.name} log out`, false, 5))
     dispatch(setUser(null))
     window.localStorage.removeItem('loggedBloglistUser')
   }
