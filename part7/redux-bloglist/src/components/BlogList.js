@@ -4,10 +4,11 @@ import { delBlog, updateBlog } from '../reducers/blogReducer'
 import { addNotification } from '../reducers/notificationReducer'
 import { useSelector, useDispatch } from 'react-redux'
 
-const BlogList = ({ user }) => {
+const BlogList = () => {
   // change the blog likes by pressing the like button
   const blogs = useSelector(state => state.blogs)
   const sortedBlogs = useSelector(state => state.blogs.sort((a,b) => b.likes - a.likes))
+  const loginUser = useSelector(state => state.loginUser)
   const dispatch = useDispatch()
 
   // update like of the blog
@@ -34,7 +35,7 @@ const BlogList = ({ user }) => {
 
   // determine if remove button will appear
   const removeButton = (targetedBlog) => {
-    return user.username === targetedBlog.user.username ?
+    return loginUser.username === targetedBlog.user.username ?
       <button onClick={() => removeBlog(targetedBlog.id)} data-cy='remove-button'>remove</button>:
       null
   }

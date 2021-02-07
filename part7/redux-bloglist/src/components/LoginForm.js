@@ -1,7 +1,6 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import { useDispatch } from 'react-redux'
-import { setUser } from '../reducers/userReducer' 
+import { setUser } from '../reducers/loginReducer' 
 import { addNotification } from '../reducers/notificationReducer'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
@@ -52,14 +51,6 @@ const LoginForm = () => {
       <button type='submit' data-cy='login-button'>login</button>
     </form>
   )
-}
-
-LoginForm.propTypes = {
-  handleLogin: PropTypes.func.isRequired,
-  setUsername: PropTypes.func.isRequired,
-  setPassword: PropTypes.func.isRequired,
-  username: PropTypes.string.isRequired,
-  password: PropTypes.string.isRequired
 }
 
 export default LoginForm

@@ -1,4 +1,8 @@
 import React, { useEffect, useRef } from 'react'
+import {
+  BrowserRouter as Router,
+  Switch, Route
+} from "react-router-dom"
 import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
@@ -6,17 +10,23 @@ import Togglable from './components/Togglable'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
 import BlogHeader from './components/BlogHeader'
+import Users from './components/Users'
 import { initializeBlogs } from './reducers/blogReducer'
 import { addNotification } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
-import { setUser } from './reducers/userReducer'
+import { setUser } from './reducers/loginReducer'
+import { initializeUsers } from './reducers/usersReducer'
 
 const App = () => {
   const dispatch = useDispatch()
-  const user = useSelector(state => state.user) 
+  const loginUser = useSelector(state => state.loginUser) 
 
   useEffect(() => {
     dispatch(initializeBlogs())
+  }, [dispatch])
+
+  useEffect(() => {
+    dispatch(initializeUsers())
   }, [dispatch])
 
   useEffect(() => {
@@ -33,7 +43,7 @@ const App = () => {
 
   // handle logout request
   const handleLogout = () => {
-    dispatch(addNotification(`${user.name} log out`, false, 5))
+    dispatch(addNotification(`${loginUser.name} log out`, false, 5))
     dispatch(setUser(null))
     window.localStorage.removeItem('loggedBloglistUser')
   }
@@ -48,12 +58,23 @@ const App = () => {
   return (
     <div>
       <Notification />
-      {user === null ?
+      {loginUser === null ?
         <LoginForm /> :
         <div>
-          <BlogHeader user={user} handleOnClick={handleLogout} />
-          {blogForm()}
-          <BlogList user={user} />
+          <BlogHeader user={loginUser} handleOnClick={handleLogout} />
+          <Router>
+            <Switch>
+              <Route path='/users'>
+                <Users />
+              </Route>
+              <Route>
+                <div>
+                  {blogForm()}
+                  <BlogList user={loginUser} />
+                </div>
+              </Route>
+            </Switch>
+          </Router>
         </div>
       }
     </div>
