@@ -29,7 +29,6 @@ export const delBlog = (id) => {
     try{
       await blogService.remove(id)
       const remainedBlogs = await blogService.getAll()
-      console.log(remainedBlogs)
       dispatch({
         type: 'DEL_BLOG',
         data: remainedBlogs 
