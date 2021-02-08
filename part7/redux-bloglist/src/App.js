@@ -72,7 +72,6 @@ const App = () => {
 
   return (
     <div>
-      <Notification />
       {loginUser === null ?
         <LoginForm /> :
         <div>
@@ -105,6 +104,7 @@ const App = () => {
           </Switch>
         </div>
       }
+      <Notification />
     </div>
   )
 }

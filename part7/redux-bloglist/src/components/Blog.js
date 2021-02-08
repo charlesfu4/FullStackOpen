@@ -46,6 +46,16 @@ const Blog = ({ blog }) => {
           </div>
           {removeButton(blog)}
           <div>{`added by ${blog.user.username}`}</div>
+          <h4>Comments</h4>
+          <ul>
+            {
+              blog.comments.map(comment => (
+                <li key={comment.id}>
+                  {comment}
+                </li>
+              ))
+            }
+          </ul>
         </div>
     </div>
   )
