@@ -9,7 +9,7 @@ import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
-import BlogHeader from './components/BlogHeader'
+import Navbar from './components/Navbar'
 import Users from './components/Users'
 import User from './components/User'
 import { initializeBlogs } from './reducers/blogReducer'
@@ -76,7 +76,8 @@ const App = () => {
       {loginUser === null ?
         <LoginForm /> :
         <div>
-          <BlogHeader user={loginUser} handleOnClick={handleLogout} />
+          <Navbar user={loginUser} handleOnClick={handleLogout}/>
+          <h1>blogs</h1>
           <Switch>
             {blog
               ?
