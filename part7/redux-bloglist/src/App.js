@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import {
-  BrowserRouter as Router,
-  Switch, Route
+  Switch, Route, useRouteMatch
 } from "react-router-dom"
 import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
@@ -11,6 +10,7 @@ import Notification from './components/Notification'
 import blogService from './services/blogs'
 import BlogHeader from './components/BlogHeader'
 import Users from './components/Users'
+import User from './components/User'
 import { initializeBlogs } from './reducers/blogReducer'
 import { addNotification } from './reducers/notificationReducer'
 import { useDispatch, useSelector } from 'react-redux'
@@ -20,6 +20,7 @@ import { initializeUsers } from './reducers/usersReducer'
 const App = () => {
   const dispatch = useDispatch()
   const loginUser = useSelector(state => state.loginUser) 
+  const users = useSelector(state => state.users) 
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -39,6 +40,7 @@ const App = () => {
   }, [dispatch])
 
 
+  
   const blogFromRef = useRef() // blog form ref to the togglable component
 
   // handle logout request
@@ -55,6 +57,12 @@ const App = () => {
     </Togglable>
   )
 
+  // router match for users id
+  const match = useRouteMatch('/users/:id')
+  const user = match
+    ? users.find(user => user.id === match.params.id)
+    : null
+
   return (
     <div>
       <Notification />
@@ -62,19 +70,24 @@ const App = () => {
         <LoginForm /> :
         <div>
           <BlogHeader user={loginUser} handleOnClick={handleLogout} />
-          <Router>
-            <Switch>
-              <Route path='/users'>
-                <Users />
+          <Switch>
+            {user
+              ?
+              <Route path='/users/:id'>
+                <User user={user}/>
               </Route>
-              <Route>
-                <div>
-                  {blogForm()}
-                  <BlogList user={loginUser} />
-                </div>
-              </Route>
-            </Switch>
-          </Router>
+              : null
+            }
+            <Route path='/users'>
+              <Users />
+            </Route>
+            <Route path='/'>
+              <div>
+                {blogForm()}
+                <BlogList user={loginUser} />
+              </div>
+            </Route>
+          </Switch>
         </div>
       }
     </div>
