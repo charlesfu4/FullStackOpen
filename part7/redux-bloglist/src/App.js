@@ -4,6 +4,7 @@ import {
 } from "react-router-dom"
 import BlogList from './components/BlogList'
 import BlogForm from './components/BlogForm'
+import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import Notification from './components/Notification'
@@ -21,6 +22,7 @@ const App = () => {
   const dispatch = useDispatch()
   const loginUser = useSelector(state => state.loginUser) 
   const users = useSelector(state => state.users) 
+  const blogs = useSelector(state => state.blogs)
 
   useEffect(() => {
     dispatch(initializeBlogs())
@@ -58,9 +60,14 @@ const App = () => {
   )
 
   // router match for users id
-  const match = useRouteMatch('/users/:id')
-  const user = match
-    ? users.find(user => user.id === match.params.id)
+  const matchUser = useRouteMatch('/users/:id')
+  const user = matchUser
+    ? users.find(user => user.id === matchUser.params.id)
+    : null
+  // router match for blogs id
+  const matchBlog = useRouteMatch('/blogs/:id')
+  const blog = matchBlog
+    ? blogs.find(blog => blog.id === matchBlog.params.id)
     : null
 
   return (
@@ -71,6 +78,13 @@ const App = () => {
         <div>
           <BlogHeader user={loginUser} handleOnClick={handleLogout} />
           <Switch>
+            {blog
+              ?
+              <Route path='/blogs/:id'>
+                <Blog blog={blog}/>
+              </Route>
+              : null
+            }
             {user
               ?
               <Route path='/users/:id'>
