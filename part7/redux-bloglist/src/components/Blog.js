@@ -7,6 +7,7 @@ import { updateBlog } from '../reducers/blogReducer'
 const Blog = ({ blog }) => {
   const loginUser = useSelector(state => state.loginUser)
   const dispatch = useDispatch()
+  const id = blog.id
 
   // update like of the blog
   const updateLikes = async (id) => {
@@ -14,6 +15,16 @@ const Blog = ({ blog }) => {
       ...blog,
       likes: blog.likes+1
     }, id))
+  }
+
+  // add comments to the blog 
+  const addComment = (event) => {
+    event.preventDefault()
+    dispatch(updateBlog({
+      ...blog,
+      comments: [...blog.comments, event.target.comment.value]
+    }, id))
+    event.target.comment.value = ''
   }
 
   // delete the blog by pressing the delete button
@@ -27,7 +38,6 @@ const Blog = ({ blog }) => {
       })
     }
   }
-
   // determine if remove button will appear
   const removeButton = (targetedBlog) => {
     return loginUser.username === targetedBlog.user.username ?
@@ -42,11 +52,16 @@ const Blog = ({ blog }) => {
           <a href={`//${blog.url}`}>{blog.url}</a>
           <div data-cy='blog-likes'>
             {blog.likes} likes
-            <button onClick={() => updateLikes(blog.id)} data-cy='like-button'>like</button>
+            <button onClick={() => updateLikes(id)} data-cy='like-button'>like</button>
           </div>
           {removeButton(blog)}
           <div>{`added by ${blog.user.username}`}</div>
           <h4>Comments</h4>
+          <form onSubmit={addComment}>
+            <input name="comment">
+            </input>
+            <button type='submit'>Comment</button>
+          </form>
           <ul>
             {
               blog.comments.map(comment => (
