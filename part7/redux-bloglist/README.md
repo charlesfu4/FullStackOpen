@@ -1,6 +1,6 @@
 # Getting Started with React app 
 
-Before starting the app, remember to also download the back-end part from part4 and set it up
+Before starting the app, remember to also download the bloglist-backend part under the same root folder and set it up
 
 Then install the required packaged by
 
