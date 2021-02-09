@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { Table } from 'react-bootstrap'
 
 const style = {
   paddingRight: 5
@@ -22,15 +23,15 @@ const Users = () => {
   return(
     <div>
       <h3>Users</h3>
-      <table>
+      <Table striped hover>
         <tbody>
           <tr>
-            <th></th>
-            <th>blogs created</th>
+            <th>Users</th>
+            <th>number of blogs created</th>
           </tr>
           {blogTab()}
         </tbody>
-      </table>
+      </Table>
     </div>
   )
 }

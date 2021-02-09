@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Navbar, Nav } from 'react-bootstrap'
+import { Navbar, Nav, Button } from 'react-bootstrap'
 
 const Navtop = ({ user, handleOnClick}) => {
   const style = {
@@ -12,7 +12,8 @@ const Navtop = ({ user, handleOnClick}) => {
     marginBottom: "10px",
   }
   const padding = {
-    paddingRight: "12px"
+    paddingRight: "12px",
+    color: "pink",
   }
 
   return(
@@ -29,7 +30,7 @@ const Navtop = ({ user, handleOnClick}) => {
             </Nav.Link>
           </Nav>
           <div style={style}>
-            <b>{user.name}</b> logged in  <button onClick={handleOnClick}>logout</button>
+            <b>{user.name}</b> logged in  <Button variant="warning" onClick={handleOnClick}>logout</Button>
           </div>
         </Navbar.Collapse>
       </Navbar>

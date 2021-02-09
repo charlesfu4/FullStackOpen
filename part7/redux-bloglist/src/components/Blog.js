@@ -3,6 +3,7 @@ import { addNotification } from '../reducers/notificationReducer'
 import { delBlog } from '../reducers/blogReducer'
 import { useSelector, useDispatch } from 'react-redux'
 import { updateBlog } from '../reducers/blogReducer'
+import { Table, Button, Form } from 'react-bootstrap'
 
 const Blog = ({ blog }) => {
   const loginUser = useSelector(state => state.loginUser)
@@ -41,36 +42,64 @@ const Blog = ({ blog }) => {
   // determine if remove button will appear
   const removeButton = (targetedBlog) => {
     return loginUser.username === targetedBlog.user.username ?
-      <button onClick={() => removeBlog(targetedBlog.id)} data-cy='remove-button'>remove</button>:
+      <Button variant="danger" onClick={() => removeBlog(targetedBlog.id)}>remove</Button>:
       null
+  }
+
+  const paddingTop = {
+    paddingTop: "1em"
   }
 
   return(
     <div className='singleBlog'>
         <div>
           <h3>{blog.title}</h3>
-          <a href={`//${blog.url}`}>{blog.url}</a>
-          <div data-cy='blog-likes'>
-            {blog.likes} likes
-            <button onClick={() => updateLikes(id)} data-cy='like-button'>like</button>
+          <Table striped bordered hover>
+            <tbody>
+              <tr>
+                <td>Url</td>
+                <td>
+                  <a href={`//${blog.url}`}>{blog.url}</a>
+                </td>
+              </tr> 
+              <tr>
+                <td>
+                  Added by 
+                </td>
+                <td>
+                  {`${blog.user.username}`}
+                </td>
+              </tr> 
+            </tbody>
+          </Table>
+          <div>
+            {blog.likes} likes <Button onClick={() => updateLikes(id)} variant="success">like</Button>
           </div>
-          {removeButton(blog)}
-          <div>{`added by ${blog.user.username}`}</div>
-          <h4>Comments</h4>
-          <form onSubmit={addComment}>
-            <input name="comment">
-            </input>
-            <button type='submit'>Comment</button>
-          </form>
-          <ul>
-            {
-              blog.comments.map(comment => (
-                <li key={comment.id}>
-                  {comment}
-                </li>
-              ))
-            }
-          </ul>
+          <div style={paddingTop}>
+            {removeButton(blog)}
+          </div>
+          <h4 style={paddingTop}>Comments</h4>
+          <Form onSubmit={addComment}>
+            <Form.Group>
+              <Form.Label>Comment</Form.Label>
+              <Form.Control
+                type='text'
+                name='comment'
+              />
+              <Button variant="primary" type='submit'>Comment</Button>
+            </Form.Group>
+          </Form>
+          <Table striped bordered hover size="sm">
+            <tbody>
+              {
+                blog.comments.map((comment, i) => (
+                  <tr key={i}>
+                    <td>{comment}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </Table>
         </div>
     </div>
   )
