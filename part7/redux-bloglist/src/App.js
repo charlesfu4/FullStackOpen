@@ -9,7 +9,7 @@ import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 import Notification from './components/Notification'
 import blogService from './services/blogs'
-import Navbar from './components/Navbar'
+import Navtop from './components/Navtop'
 import Users from './components/Users'
 import User from './components/User'
 import { initializeBlogs } from './reducers/blogReducer'
@@ -71,11 +71,12 @@ const App = () => {
     : null
 
   return (
-    <div>
+    <div className="container">
       {loginUser === null ?
         <LoginForm /> :
         <div>
-          <Navbar user={loginUser} handleOnClick={handleLogout}/>
+          <Navtop user={loginUser} handleOnClick={handleLogout}/>
+          <Notification />
           <h1>blogs</h1>
           <Switch>
             {blog
@@ -104,7 +105,6 @@ const App = () => {
           </Switch>
         </div>
       }
-      <Notification />
     </div>
   )
 }

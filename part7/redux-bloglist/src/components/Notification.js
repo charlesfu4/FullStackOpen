@@ -1,4 +1,5 @@
 import React from 'react'
+import { Alert } from 'react-bootstrap'
 import { useSelector } from 'react-redux'
 
 const Notification = () => {
@@ -18,13 +19,13 @@ const Notification = () => {
   else{
     return (
       returnedState.error ?
-        <div className='error' data-cy='error-noti'>
+        <Alert variant="danger">
           {JSON.stringify(returnedState.notification)}
-        </div>
+        </Alert>
         :
-        <div className='note' data-cy='passed-noti'>
+        <Alert variant="success">
           {returnedState.notification}
-        </div>
+        </Alert>
     )
   }
 
