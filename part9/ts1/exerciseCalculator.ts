@@ -14,10 +14,15 @@ interface RecordTargetPair {
 }
 
 const parseArgs = (args: Array<string>) : RecordTargetPair => {
-  if(args.length <= 3) throw new Error('Please input the records amd target');
+  if(args.length <= 3) throw new Error('Please input the records and target');
   const numberizeArgs = args
     .slice(2)
-    .map(arg => Number(arg));
+    .map(arg => {
+      if(isNaN(Number(arg))){
+        throw new Error('provided values were not numbers');
+      }
+      return Number(arg)
+    });
   return {
     records: numberizeArgs.slice(0, numberizeArgs.length-1),
     target: numberizeArgs[numberizeArgs.length-1]
@@ -69,5 +74,5 @@ try{
   const { records, target } = parseArgs(process.argv);
   console.log(calculateExercises(records, target));
 } catch(error){
-  console.log('Error, something went wrong.')
+  console.log('Error, something went wrong.', error)
 }
