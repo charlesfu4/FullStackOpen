@@ -1,4 +1,4 @@
-import express, { query } from 'express';
+import express from 'express';
 import { calculateBmi } from './bmiCalculator'; 
 const app = express();
 
@@ -8,12 +8,9 @@ interface bmiResult {
   bmi: string;
 }
 
-interface query {
-  weight: string;
-  height: string;
-}
 
-const parseQuery = (query: query) : bmiResult => {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const parseQuery = (query: any) : bmiResult => {
   const queriesArr : Array<string> = Object.keys(query);
   if(queriesArr.length != 2) 
     throw new Error('Input queries accept 2 arguments.');
@@ -26,8 +23,8 @@ const parseQuery = (query: query) : bmiResult => {
     weight: Number(query.weight),
     height: Number(query.height),
     bmi: calculateBmi(Number(query.weight), Number(query.height))
-  }
-}
+  };
+};
 
 //sample query
 app.get('/hello', (_req, res) => {
@@ -38,12 +35,12 @@ app.get('/hello', (_req, res) => {
 app.get('/bmi', (req, res) => {
   try{
     res.send(
-      parseQuery({weight: String(req.query.weight), height: String(req.query.height)})
+      parseQuery(req.query)
     );
   } catch(error){
     res.send({
-      error: 'malformatted parameters',
-    })
+      error: error.message,
+    });
   }
 });
 

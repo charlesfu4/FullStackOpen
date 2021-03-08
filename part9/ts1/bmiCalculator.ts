@@ -12,11 +12,11 @@ export const parseArguments = (args: Array<string>): MultiplyValues => {
     return {
       value1: Number(args[2]),
       value2: Number(args[3])
-    }
+    };
   } else {
     throw new Error('Provided values were not numbers!');
   }
-}
+};
 
 export const calculateBmi = (h: number, w: number): Result =>  {
   if(w/(h*h/10000) < 15)
@@ -35,11 +35,11 @@ export const calculateBmi = (h: number, w: number): Result =>  {
     return 'Obese Class II (Severely obese)';
   else
     return 'Obese Class III (Very severely obese)';
-}
+};
 
 try {
   const { value1, value2 } = parseArguments(process.argv);
   console.log(calculateBmi(value1, value2));
 } catch (e) {
-  console.log('Error, something bad happened, message: ', e.message);
+  console.log('Error, something bad happened, message: ', String(e.message));
 }
