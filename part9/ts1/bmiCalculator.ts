@@ -33,7 +33,7 @@ const calculateBmi = (h: number, w: number): Result =>  {
     return 'Obese Class I (Moderately obese)';
   else if(w/(h*h/10000) >= 35 && w/(h*h/10000) < 40)
     return 'Obese Class II (Severely obese)';
-  else if(w/(h*h/10000) >= 40)
+  else
     return 'Obese Class III (Very severely obese)';
 }
 
