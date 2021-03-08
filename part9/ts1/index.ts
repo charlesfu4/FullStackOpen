@@ -1,5 +1,6 @@
 import express from 'express';
 import { calculateBmi } from './bmiCalculator'; 
+import { calculateExercises, Report } from './exerciseCalculator'
 const app = express();
 
 interface bmiResult {
@@ -7,7 +8,6 @@ interface bmiResult {
   height: number;
   bmi: string;
 }
-
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const parseQuery = (query: any) : bmiResult => {
@@ -26,6 +26,13 @@ const parseQuery = (query: any) : bmiResult => {
   };
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const parseBody = (body: any) : Report => {
+  const daily_exercises : Array<number> = body.daily_exercises;
+  const target : number = body.target;
+  return calculateExercises(daily_exercises, target); 
+};
+
 //sample query
 app.get('/hello', (_req, res) => {
   res.send('Hello Full stack!');
@@ -42,6 +49,21 @@ app.get('/bmi', (req, res) => {
       error: error.message,
     });
   }
+});
+
+// post method for exercise calculator
+app.post('/exercises', (req, res) => {
+  console.log(JSON.parse(req.body));
+  try{
+    res.send(
+      parseBody(req.body)
+    );
+  } catch(error){
+    res.send({
+      error:error.message
+    });
+  }
+
 });
 
 const PORT = 3003;

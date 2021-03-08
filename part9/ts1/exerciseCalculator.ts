@@ -1,4 +1,4 @@
-interface Report {
+export interface Report {
   periodLength: number;
   trainingDays: number;
   success: boolean;
@@ -8,8 +8,8 @@ interface Report {
   average: number;
 }
 
-interface RecordTargetPair {
-  records: Array<number>;
+export interface RecordTargetPair {
+  daily_exercises: Array<number>;
   target: number
 }
 
@@ -24,7 +24,7 @@ const parseArgs = (args: Array<string>) : RecordTargetPair => {
       return Number(arg);
     });
   return {
-    records: numberizeArgs.slice(0, numberizeArgs.length-1),
+    daily_exercises: numberizeArgs.slice(0, numberizeArgs.length-1),
     target: numberizeArgs[numberizeArgs.length-1]
   };
 };
@@ -40,7 +40,7 @@ const ratingDescription = (rating:number) : string => {
   else return 'Try it harder next time, you failed!'; 
 };
 
-const calculateExercises = ( dailyExercises: Array<number>, targetHour: number) : Report => {
+export const calculateExercises = ( dailyExercises: Array<number>, targetHour: number) : Report => {
   const periodLength = dailyExercises.length;
   const trainingDays = dailyExercises.reduce((acc, val) => {
     if(val > 0){
@@ -71,8 +71,8 @@ const calculateExercises = ( dailyExercises: Array<number>, targetHour: number) 
 };
 
 try{
-  const { records, target } = parseArgs(process.argv);
-  console.log(calculateExercises(records, target));
+  const { daily_exercises, target } = parseArgs(process.argv);
+  console.log(calculateExercises(daily_exercises, target));
 } catch(error){
   console.log('Error, something went wrong.', error);
 }
