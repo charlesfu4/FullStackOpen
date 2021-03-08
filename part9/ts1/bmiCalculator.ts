@@ -18,7 +18,7 @@ const parseArguments = (args: Array<string>): MultiplyValues => {
   }
 }
 
-const calculateBmi = (h: number, w: number): Result =>  {
+export const calculateBmi = (h: number, w: number): Result =>  {
   if(w/(h*h/10000) < 15)
     return 'Very severely underweight';
   else if(w/(h*h/10000) >= 15 && w/(h*h/10000) < 16)
