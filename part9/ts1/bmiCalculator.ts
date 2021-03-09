@@ -1,9 +1,9 @@
 type Result = string;
+/*
 interface MultiplyValues {
   value1: number;
   value2: number;
 }
-
 export const parseArguments = (args: Array<string>): MultiplyValues => {
   if (args.length < 4) throw new Error('Not enough arguments');
   if (args.length > 4) throw new Error('Too many arguments');
@@ -17,6 +17,7 @@ export const parseArguments = (args: Array<string>): MultiplyValues => {
     throw new Error('Provided values were not numbers!');
   }
 };
+*/
 
 export const calculateBmi = (h: number, w: number): Result =>  {
   if(w/(h*h/10000) < 15)
@@ -33,13 +34,16 @@ export const calculateBmi = (h: number, w: number): Result =>  {
     return 'Obese Class I (Moderately obese)';
   else if(w/(h*h/10000) >= 35 && w/(h*h/10000) < 40)
     return 'Obese Class II (Severely obese)';
-  else
+  else if(w/(h*h/10000) >= 40)
     return 'Obese Class III (Very severely obese)';
+  else return 'not classified';
 };
 
+/*
 try {
   const { value1, value2 } = parseArguments(process.argv);
   console.log(calculateBmi(value1, value2));
 } catch (e) {
-  console.log('Error, something bad happened, message: ', String(e.message));
+  console.log('Error, something bad happened, message: ', e);
 }
+*/

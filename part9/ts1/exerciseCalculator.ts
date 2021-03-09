@@ -12,7 +12,7 @@ export interface RecordTargetPair {
   daily_exercises: Array<number>;
   target: number
 }
-
+/*
 const parseArgs = (args: Array<string>) : RecordTargetPair => {
   if(args.length <= 3) throw new Error('Please input the records and target');
   const numberizeArgs = args
@@ -28,6 +28,7 @@ const parseArgs = (args: Array<string>) : RecordTargetPair => {
     target: numberizeArgs[numberizeArgs.length-1]
   };
 };
+*/
 
 const rating = (average:number, targetHour:number) : number => {
   if(average/targetHour >= 1.5) return 3; 
@@ -69,10 +70,11 @@ export const calculateExercises = ( dailyExercises: Array<number>, targetHour: n
     average: average 
   };
 };
-
+/*
 try{
   const { daily_exercises, target } = parseArgs(process.argv);
   console.log(calculateExercises(daily_exercises, target));
 } catch(error){
   console.log('Error, something went wrong.', error);
 }
+*/
