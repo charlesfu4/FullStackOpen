@@ -16,7 +16,7 @@ type SelectFieldProps = {
   options: GenderOption[];
 };
 
-export const SelectField = ({
+export const SelectField: React.FC<SelectFieldProps> = ({
   name,
   label,
   options
@@ -38,11 +38,11 @@ interface TextProps extends FieldProps {
   placeholder: string;
 }
 
-export const TextField= ({
+export const TextField: React.FC<TextProps> = ({
   field,
   label,
   placeholder
-}: TextProps) => (
+}) => (
   <Form.Field>
     <label>{label}</label>
     <Field placeholder={placeholder} {...field} />
@@ -62,7 +62,7 @@ interface NumberProps extends FieldProps {
   max: number;
 }
 
-export const NumberField = ({ field, label, min, max } : NumberProps ) => (
+export const NumberField: React.FC<NumberProps> = ({ field, label, min, max }) => (
   <Form.Field>
     <label>{label}</label>
     <Field {...field} type='number' min={min} max={max} />

@@ -22,7 +22,7 @@ const genderOptions: GenderOption[] = [
   { value: Gender.Other, label: "Other" }
 ];
 
-export const AddPatientForm = ({ onSubmit, onCancel } : Props ) => {
+export const AddPatientForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
   return (
     <Formik
       initialValues={{

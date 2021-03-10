@@ -15,3 +15,4 @@ export interface Patient {
 }
 
 export type NonSensitiveDiagnose = Omit<Diagnose, 'latin'>;
+export type NonSensitivePatient = Omit<Patient, 'ssn'>;

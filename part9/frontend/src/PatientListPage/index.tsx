@@ -9,7 +9,7 @@ import { apiBaseUrl } from "../constants";
 import HealthRatingBar from "../components/HealthRatingBar";
 import { useStateValue } from "../state";
 
-const PatientListPage = () => {
+const PatientListPage: React.FC = () => {
   const [{ patients }, dispatch] = useStateValue();
 
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
@@ -31,8 +31,8 @@ const PatientListPage = () => {
       dispatch({ type: "ADD_PATIENT", payload: newPatient });
       closeModal();
     } catch (e) {
-      console.error(e.response?.data || 'Unknown Error');
-      setError(e.response?.data?.error || 'Unknown error');
+      console.error(e.response.data);
+      setError(e.response.data.error);
     }
   };
 

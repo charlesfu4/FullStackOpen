@@ -9,10 +9,10 @@ import { Patient } from "./types";
 
 import PatientListPage from "./PatientListPage";
 
-const App = () => {
+const App: React.FC = () => {
   const [, dispatch] = useStateValue();
   React.useEffect(() => {
-    void axios.get<void>(`${apiBaseUrl}/ping`);
+    axios.get<void>(`${apiBaseUrl}/ping`);
 
     const fetchPatientList = async () => {
       try {
@@ -24,7 +24,7 @@ const App = () => {
         console.error(e);
       }
     };
-    void fetchPatientList();
+    fetchPatientList();
   }, [dispatch]);
 
   return (
@@ -37,9 +37,7 @@ const App = () => {
           </Button>
           <Divider hidden />
           <Switch>
-            <Route path="/patients/:id">
-              <PatientListPage />
-            </Route>
+            <Route path="/" render={() => <PatientListPage />} />
           </Switch>
         </Container>
       </Router>
