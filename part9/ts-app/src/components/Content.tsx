@@ -1,20 +1,10 @@
 import React from 'react';
-interface course {
-  name: string;
-  exerciseCount: number;
-}
+import Part from './Part';
+import { CoursePart } from '../types';
 
-const Content = ({ parts } : { parts: course[]}) => (
+const Content = ({ parts } : { parts: CoursePart[]}) => (
   <div>
-    <p>
-      {parts[0].name} {parts[0].exerciseCount}
-    </p>
-    <p>
-      {parts[1].name} {parts[1].exerciseCount}
-    </p>
-    <p>
-      {parts[2].name} {parts[2].exerciseCount}
-    </p>
+    <Part parts={parts} />
   </div>
 );
 
