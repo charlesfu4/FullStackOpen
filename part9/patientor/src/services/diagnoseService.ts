@@ -12,7 +12,15 @@ const getNonSensitiveDiagnoses = () : NonSensitiveDiagnose[] => {
   }));
 };
 
+const getIdDiagnoseEntry = ( id: string ) : Diagnose | undefined => {
+  return diagnoses.find(({ code, name }) => ({
+    code,
+    name,
+  }.code = id));
+};
+
 export default {
   getEntries,
   getNonSensitiveDiagnoses,
+  getIdDiagnoseEntry
 };

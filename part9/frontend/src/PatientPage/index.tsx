@@ -3,13 +3,15 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Container, Icon, List } from "semantic-ui-react";
 
-import { Patient } from "../types";
+import { Patient, Diagnosis } from "../types";
 import { apiBaseUrl } from "../constants";
 import { SemanticICONS } from "semantic-ui-react/dist/commonjs/generic";
 
 const PatientPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const [patient, setPatient] = React.useState<Patient | undefined>();
+  const [diagnosis, setDiagnosis] = React.useState<Diagnosis[] | undefined>();
+
   React.useEffect(() => {
     const updatePatient = async ( pid: string ) => {
       try{
@@ -22,6 +24,20 @@ const PatientPage: React.FC = () => {
       }
     };
     updatePatient(id);
+  }, [id]);
+
+  React.useEffect(() => {
+    const fetchDiagnosis = async () => {
+      try{
+        const { data: returnDignosis } = await axios.get<Diagnosis[]>(
+          `${apiBaseUrl}/diagnosis`
+        );
+        setDiagnosis(returnDignosis);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetchDiagnosis();
   }, [id]);
 
   const transGender = (patient: Patient | undefined): SemanticICONS => {
@@ -56,7 +72,7 @@ const PatientPage: React.FC = () => {
             <div>{`${entry.date} ${entry.description}`}</div>
             <List bulleted>
               {entry.diagnosisCodes?.map(code => (
-                <List.Item key={code}>{code}</List.Item>
+                <List.Item key={code}>{`${code} ${diagnosis?.find(d => d.code === code)?.name}`}</List.Item>
               ))}
             </List>
           </div>

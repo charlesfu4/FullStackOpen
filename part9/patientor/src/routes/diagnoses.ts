@@ -7,6 +7,10 @@ router.get('/', (_req, res) => {
   res.send(diagnoseService.getEntries());
 });
 
+router.get('/:id', (req, res) => {
+  res.send(diagnoseService.getIdDiagnoseEntry(req.params.id));
+});
+
 router.get('/censored', (_req, res) => {
   res.send(diagnoseService.getNonSensitiveDiagnoses());
 });
