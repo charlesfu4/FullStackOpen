@@ -1,7 +1,7 @@
 export enum Gender {
   Female = 'female',
   Male = 'male',
-  Mixed = 'mixed'
+  Other = 'other'
 }
 
 export interface Diagnose {

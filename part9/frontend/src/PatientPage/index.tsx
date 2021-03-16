@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { Container, Icon } from "semantic-ui-react";
+import { Container, Icon, List } from "semantic-ui-react";
 
 import { Patient } from "../types";
 import { apiBaseUrl } from "../constants";
@@ -24,19 +24,46 @@ const PatientPage: React.FC = () => {
     updatePatient(id);
   }, [id]);
 
+  const transGender = (patient: Patient | undefined): SemanticICONS => {
+    switch(patient?.gender){
+      case "male":
+        return "mars";
+      case "female":
+        return "venus";
+      case "other":
+        return "transgender";
+      default:
+        return "transgender";
+    }
+  };
+
   return (
     <div className="App">
       <Container textAlign="left">
         <h2>
           {`${patient?.name}`}
-          <Icon name={patient?.gender as SemanticICONS} />
+          <Icon name={transGender(patient)} />
         </h2>
-        <h4>
+        <div>
           {`ssn: ${patient?.ssn}`}
-        </h4>
-        <h4>
+        </div>
+        <div>
           {`occupation: ${patient?.occupation}`}
-        </h4>
+        </div>
+        <h4>entries</h4>
+        {patient?.entries.map(entry => (
+          <div key={entry.id}>
+            <div>{`${entry.date} ${entry.description}`}</div>
+            <List bulleted>
+              {entry.diagnosisCodes?.map(code => (
+                <List.Item key={code}>{code}</List.Item>
+              ))}
+            </List>
+          </div>
+
+        )
+        )}
+
       </Container>
     </div>
   );
