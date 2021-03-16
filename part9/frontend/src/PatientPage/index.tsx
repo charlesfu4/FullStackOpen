@@ -1,9 +1,15 @@
 import React from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { Container, Icon, List } from "semantic-ui-react";
+import { Container, Icon, List, Message } from "semantic-ui-react";
 
-import { Patient, Diagnosis } from "../types";
+import { Patient,
+  Diagnosis,
+  Entry, 
+  HospitalEntry, 
+  OccupationalHealthcareEntry
+ } from "../types";
+
 import { apiBaseUrl } from "../constants";
 import { SemanticICONS } from "semantic-ui-react/dist/commonjs/generic";
 
@@ -52,6 +58,32 @@ const PatientPage: React.FC = () => {
         return "transgender";
     }
   };
+  
+  const EntryDetails: React.FC<{ entry: Entry }> = ({ entry }) => {
+    switch (entry.type) {
+      case "HealthCheck":
+        return <HealthCheckEntry entry={entry} />;
+      case "Hospital":
+        return <HospitalEntry entry={entry} />;
+      case 'OccupationalHealthcare':
+        return <OccupationalHealthcareEntry entry={} />;
+      default
+    }
+
+  };
+
+  const transIcon = (patient: Patient | undefined): SemanticICONS => {
+    switch(patient?.gender){
+      case "male":
+        return "mars";
+      case "female":
+        return "venus";
+      case "other":
+        return "transgender";
+      default:
+        return "transgender";
+    }
+  };
 
   return (
     <div className="App">
@@ -68,14 +100,17 @@ const PatientPage: React.FC = () => {
         </div>
         <h4>entries</h4>
         {patient?.entries.map(entry => (
-          <div key={entry.id}>
-            <div>{`${entry.date} ${entry.description}`}</div>
-            <List bulleted>
-              {entry.diagnosisCodes?.map(code => (
-                <List.Item key={code}>{`${code} ${diagnosis?.find(d => d.code === code)?.name}`}</List.Item>
-              ))}
-            </List>
-          </div>
+          <Message 
+            key={entry.id} 
+            header={`${entry.date} ${entry.description}`}
+            content={
+              <List bulleted>
+                {entry.diagnosisCodes?.map(code => (
+                  <List.Item key={code}>{`${code} ${diagnosis?.find(d => d.code === code)?.name}`}</List.Item>
+                ))}
+              </List>
+            } 
+          />
 
         )
         )}
