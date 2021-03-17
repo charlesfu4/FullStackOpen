@@ -1,17 +1,17 @@
 import React from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { Container, Icon, List, Message } from "semantic-ui-react";
-
-import { Patient,
-  Diagnosis,
-  Entry, 
-  HospitalEntry, 
-  OccupationalHealthcareEntry
- } from "../types";
-
-import { apiBaseUrl } from "../constants";
+import { Container, Icon } from "semantic-ui-react";
 import { SemanticICONS } from "semantic-ui-react/dist/commonjs/generic";
+
+import { Patient, Diagnosis, Entry } from "../types";
+import { apiBaseUrl } from "../constants";
+
+import HealthCheckEntry from "../components/HealthCheckEntry";
+import HospitalEntry from "../components/HospitalEntry";
+import OccupationalHealthcareEntry from "../components/OccupationalHealthcareEntry";
+
+
 
 const PatientPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -58,30 +58,23 @@ const PatientPage: React.FC = () => {
         return "transgender";
     }
   };
+
+  const assertNever = (value: never): never => {
+    throw new Error(
+      `Unhandled discriminated union member: ${JSON.stringify(value)}`
+    );
+  };
   
-  const EntryDetails: React.FC<{ entry: Entry }> = ({ entry }) => {
+  const EntryDetails: React.FC<{ entry: Entry; diagnosis: Diagnosis[] | undefined }> = ({ entry, diagnosis }) => {
     switch (entry.type) {
       case "HealthCheck":
-        return <HealthCheckEntry entry={entry} />;
+        return <HealthCheckEntry entry={entry} diagnosis={diagnosis} />;
       case "Hospital":
-        return <HospitalEntry entry={entry} />;
+        return <HospitalEntry entry={entry} diagnosis={diagnosis} />;
       case 'OccupationalHealthcare':
-        return <OccupationalHealthcareEntry entry={} />;
-      default
-    }
-
-  };
-
-  const transIcon = (patient: Patient | undefined): SemanticICONS => {
-    switch(patient?.gender){
-      case "male":
-        return "mars";
-      case "female":
-        return "venus";
-      case "other":
-        return "transgender";
+        return <OccupationalHealthcareEntry entry={entry} diagnosis={diagnosis} />;
       default:
-        return "transgender";
+        return assertNever(entry);
     }
   };
 
@@ -99,22 +92,9 @@ const PatientPage: React.FC = () => {
           {`occupation: ${patient?.occupation}`}
         </div>
         <h4>entries</h4>
-        {patient?.entries.map(entry => (
-          <Message 
-            key={entry.id} 
-            header={`${entry.date} ${entry.description}`}
-            content={
-              <List bulleted>
-                {entry.diagnosisCodes?.map(code => (
-                  <List.Item key={code}>{`${code} ${diagnosis?.find(d => d.code === code)?.name}`}</List.Item>
-                ))}
-              </List>
-            } 
-          />
-
-        )
+        {patient?.entries.map(entry => 
+          <EntryDetails key={entry.id} entry={entry} diagnosis={diagnosis} />
         )}
-
       </Container>
     </div>
   );

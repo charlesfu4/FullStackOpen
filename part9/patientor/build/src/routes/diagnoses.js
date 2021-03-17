@@ -9,6 +9,9 @@ const router = express_1.default.Router();
 router.get('/', (_req, res) => {
     res.send(diagnoseService_1.default.getEntries());
 });
+router.get('/:id', (req, res) => {
+    res.send(diagnoseService_1.default.getIdDiagnoseEntry(req.params.id));
+});
 router.get('/censored', (_req, res) => {
     res.send(diagnoseService_1.default.getNonSensitiveDiagnoses());
 });

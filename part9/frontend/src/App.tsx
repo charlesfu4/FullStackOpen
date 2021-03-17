@@ -14,8 +14,6 @@ const App: React.FC = () => {
   const [, dispatch] = useStateValue();
 
   React.useEffect(() => {
-    axios.get<void>(`${apiBaseUrl}/ping`);
-
     const fetchPatientList = async () => {
       try {
         const { data: patientListFromApi } = await axios.get<Patient[]>(

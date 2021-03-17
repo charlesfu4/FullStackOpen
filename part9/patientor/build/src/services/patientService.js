@@ -9,13 +9,24 @@ const getEntries = () => {
     return patients_1.default;
 };
 const getNonSensitivePatientEntries = () => {
-    return patients_1.default.map(({ id, name, dateOfBirth, gender, occupation }) => ({
+    return patients_1.default.map(({ id, name, dateOfBirth, gender, entries, occupation }) => ({
         id,
         name,
         dateOfBirth,
         gender,
+        entries,
         occupation,
     }));
+};
+const getIdPatientEntries = (pid) => {
+    return patients_1.default.find(({ id, name, dateOfBirth, gender, entries, occupation }) => ({
+        id,
+        name,
+        dateOfBirth,
+        gender,
+        entries,
+        occupation,
+    }.id == pid));
 };
 const addPatient = (entry) => {
     const newPatient = Object.assign({ id: uuid_1.v1() }, entry);
@@ -25,5 +36,6 @@ const addPatient = (entry) => {
 exports.default = {
     getEntries,
     getNonSensitivePatientEntries,
+    getIdPatientEntries,
     addPatient
 };

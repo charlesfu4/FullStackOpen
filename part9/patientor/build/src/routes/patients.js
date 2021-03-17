@@ -10,6 +10,9 @@ const router = express_1.default.Router();
 router.get('/', (_req, res) => {
     res.send(patientService_1.default.getNonSensitivePatientEntries());
 });
+router.get('/:id', (req, res) => {
+    res.send(patientService_1.default.getIdPatientEntries(req.params.id));
+});
 router.post('/', (req, res) => {
     try {
         const newPatient = utils_1.default(req.body);

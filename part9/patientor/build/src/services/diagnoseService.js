@@ -13,7 +13,14 @@ const getNonSensitiveDiagnoses = () => {
         name,
     }));
 };
+const getIdDiagnoseEntry = (id) => {
+    return diagnoses_1.default.find(({ code, name }) => ({
+        code,
+        name,
+    }.code = id));
+};
 exports.default = {
     getEntries,
     getNonSensitiveDiagnoses,
+    getIdDiagnoseEntry
 };
