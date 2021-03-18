@@ -1,7 +1,7 @@
 import diagnoses from '../../data/diagnoses';
-import { Diagnose, NonSensitiveDiagnose } from '../types';
+import { Diagnosis, NonSensitiveDiagnose } from '../types';
 
-const getEntries = () : Array<Diagnose> => {
+const getEntries = () : Array<Diagnosis> => {
   return diagnoses;
 };
 
@@ -12,7 +12,7 @@ const getNonSensitiveDiagnoses = () : NonSensitiveDiagnose[] => {
   }));
 };
 
-const getIdDiagnoseEntry = ( id: string ) : Diagnose | undefined => {
+const getIdDiagnoseEntry = ( id: string ) : Diagnosis | undefined => {
   return diagnoses.find(({ code, name }) => ({
     code,
     name,
