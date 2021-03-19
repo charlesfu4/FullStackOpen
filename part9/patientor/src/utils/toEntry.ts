@@ -16,7 +16,7 @@ type Attributes = {
 
 const toNewEntry = ({ description, date, specialist, diagnosisCodes, type, discharge, healthCheckRating, sickLeave, employerName } : Attributes): NewEntry => {
   switch (type){
-    case 'Hospital':
+    case "Hospital":
       return(
         {
           description: parseDescription(description),
@@ -27,7 +27,7 @@ const toNewEntry = ({ description, date, specialist, diagnosisCodes, type, disch
           discharge: parseDischarge(discharge)
         } as NewEntry
       );
-    case 'HealthcheckEntry':
+    case "HealthCheck":
       return(
         {
           description: parseDescription(description),
@@ -38,7 +38,7 @@ const toNewEntry = ({ description, date, specialist, diagnosisCodes, type, disch
           healthCheckRating: parseHealthChecking(healthCheckRating)
         } as NewEntry 
       );
-    case 'OccupationalHealthcheckEntry':
+    case "OccupationalHealthcare":
       return(
         {
           description: parseDescription(description),
@@ -90,7 +90,11 @@ const parseDate = (date: unknown): string => {
 };
 
 const parseDiagnosis = (diagnosis: unknown): Array<Diagnosis['code']> => {
-  if(!diagnosis || !isDiagnosisArray(diagnosis)){
+  // optional field initialization.
+  if(!diagnosis){
+    return [];
+  }
+  else if(!isDiagnosisArray(diagnosis)){
     throw new Error('Incorrect or missing diagnosis: '+diagnosis);
   }
   return diagnosis;
@@ -118,7 +122,14 @@ const parseDischarge = (discharge: unknown): Discharge => {
 };
 
 const parseSickLeave = (sickLeave: unknown): SickLeave => {
-  if(!sickLeave  || !isSickLeave(sickLeave)){
+  // optional field initialization.
+  if(!sickLeave){
+    return {
+      startDate: '0000-00-00',
+      endDate: '0000-00-00'
+    };
+  }
+  else if(!isSickLeave(sickLeave)){
     throw new Error('Inccorect sickLeave: '+sickLeave);
   }
   return sickLeave;

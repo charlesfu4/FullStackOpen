@@ -9,13 +9,14 @@ type Fields = {
   entries: unknown
 };
 
-const toNewPatient = ({ name, dateOfBirth, ssn, gender, occupation, _entries }: Fields): NewPatient => {
+const toNewPatient = ({ name, dateOfBirth, ssn, gender, occupation,  }: Fields): NewPatient => {
   const newEntry: NewPatient = {
     name: parseName(name),
     dateOfBirth: parseDate(dateOfBirth),
     ssn: parseSsn(ssn),
     gender: parseGender(gender),
     occupation: parseOccupation(occupation),
+    // optional field initialization.
     entries: []
   };
   return newEntry;
