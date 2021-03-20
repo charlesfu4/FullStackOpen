@@ -1,7 +1,7 @@
 import React from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import { Container, Icon } from "semantic-ui-react";
+import { Container, Icon, Button } from "semantic-ui-react";
 import { SemanticICONS } from "semantic-ui-react/dist/commonjs/generic";
 
 import { Patient, Diagnosis, Entry } from "../types";
@@ -10,41 +10,37 @@ import { apiBaseUrl } from "../constants";
 import HealthCheckEntry from "../components/HealthCheckEntry";
 import HospitalEntry from "../components/HospitalEntry";
 import OccupationalHealthcareEntry from "../components/OccupationalHealthcareEntry";
-
-
+import AddEntryModal from "../AddEntryModal";
+import { NewEntry } from "../types";
+import { useStateValue } from "../state";
 
 const PatientPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [patient, setPatient] = React.useState<Patient | undefined>();
-  const [diagnosis, setDiagnosis] = React.useState<Diagnosis[] | undefined>();
+  const [{ patients, diagnosis }, dispatch] = useStateValue();
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string | undefined>();
 
-  React.useEffect(() => {
-    const updatePatient = async ( pid: string ) => {
-      try{
-        const { data: returnedPatient } = await axios.get<Patient>(
-          `${apiBaseUrl}/patients/${pid}`
-        );
-        setPatient(returnedPatient);
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    updatePatient(id);
-  }, [id]);
+  const openModal = (): void => setModalOpen(true);
+  const patient = Object.values(patients).find((patient: Patient) => patient.id === id);
 
-  React.useEffect(() => {
-    const fetchDiagnosis = async () => {
-      try{
-        const { data: returnDignosis } = await axios.get<Diagnosis[]>(
-          `${apiBaseUrl}/diagnosis`
-        );
-        setDiagnosis(returnDignosis);
-      } catch (e) {
-        console.error(e);
-      }
-    };
-    fetchDiagnosis();
-  }, [id]);
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
+  };
+
+  const submitNewEntry = async (values: NewEntry) => {
+    try {
+      const { data: updatedPatient } = await axios.post<Patient>(
+        `${apiBaseUrl}/patients/${patient?.id}/entries`,
+        values
+      );
+      dispatch({ type: "ADD_ENTRY", payload: updatedPatient });
+      closeModal();
+    } catch (e) {
+      console.error(e.response.data);
+      setError(e.response.data.error);
+    }
+  };
 
   const transGender = (patient: Patient | undefined): SemanticICONS => {
     switch(patient?.gender){
@@ -65,7 +61,7 @@ const PatientPage: React.FC = () => {
     );
   };
   
-  const EntryDetails: React.FC<{ entry: Entry; diagnosis: Diagnosis[] | undefined }> = ({ entry, diagnosis }) => {
+  const EntryDetails: React.FC<{ entry: Entry; diagnosis: Diagnosis[] }> = ({ entry, diagnosis }) => {
     switch (entry.type) {
       case "HealthCheck":
         return <HealthCheckEntry entry={entry} diagnosis={diagnosis} />;
@@ -92,8 +88,15 @@ const PatientPage: React.FC = () => {
           {`occupation: ${patient?.occupation}`}
         </div>
         <h4>entries</h4>
+        <AddEntryModal
+          modalOpen={modalOpen}
+          onSubmit={submitNewEntry}
+          error={error}
+          onClose={closeModal}
+        />
+        <Button onClick={() => openModal()}>Add New Entry</Button>
         {patient?.entries.map(entry => 
-          <EntryDetails key={entry.id} entry={entry} diagnosis={diagnosis} />
+          <EntryDetails key={entry.id} entry={entry} diagnosis={Object.values(diagnosis)} />
         )}
       </Container>
     </div>

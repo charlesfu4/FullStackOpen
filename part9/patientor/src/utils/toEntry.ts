@@ -136,6 +136,7 @@ const parseSickLeave = (sickLeave: unknown): SickLeave => {
 };
 
 const parseHealthChecking = (healthCheckRating: unknown): HealthCheckRating => {
+  if(healthCheckRating === 0) return healthCheckRating;
   if(!healthCheckRating  || !ishealthCheck(healthCheckRating)){
     throw new Error('Inccorect healthCheckRating: '+healthCheckRating);
   }

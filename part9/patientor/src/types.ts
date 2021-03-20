@@ -11,7 +11,7 @@ export interface Diagnosis {
 }
 
 export enum EntryType {
-  Hospital = 'Hospital',
+  Hospital ='Hospital',
   OccupationalHealthcare = 'OccupationalHealthcare',
   HealthCheck = 'HealthCheck'
 }
