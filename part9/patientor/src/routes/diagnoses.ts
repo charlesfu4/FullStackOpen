@@ -4,15 +4,31 @@ import diagnoseService from '../services/diagnoseService';
 const router = express.Router();
 
 router.get('/', (_req, res) => {
-  res.send(diagnoseService.getEntries());
+  try{
+    const diagnosis = diagnoseService.getEntries();
+    res.send(diagnosis);
+  } catch(e){
+    res.json(400).send(e.message);
+  }
 });
 
 router.get('/:id', (req, res) => {
-  res.send(diagnoseService.getIdDiagnoseEntry(req.params.id));
+  try{
+    const diagnosis = diagnoseService.getIdDiagnoseEntry(req.params.id);
+    res.send(diagnosis);
+  } catch(e){
+    res.json(400).send(e.message);
+  }
 });
 
 router.get('/censored', (_req, res) => {
-  res.send(diagnoseService.getNonSensitiveDiagnoses());
+  try{
+    const diagnosis = diagnoseService.getNonSensitiveDiagnoses();
+    res.send(diagnosis);
+  } catch(e){
+    res.json(400).send(e.message);
+  }
+  res.send();
 });
 
 export default router;

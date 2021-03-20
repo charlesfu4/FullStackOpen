@@ -9,10 +9,22 @@ const toEntry_1 = __importDefault(require("../utils/toEntry"));
 const toPatient_1 = __importDefault(require("../utils/toPatient"));
 const router = express_1.default.Router();
 router.get('/', (_req, res) => {
-    res.send(patientService_1.default.getEntries());
+    try {
+        const patients = patientService_1.default.getEntries();
+        res.json(patients);
+    }
+    catch (e) {
+        res.status(400).send(e.message);
+    }
 });
 router.get('/:id', (req, res) => {
-    res.send(patientService_1.default.getIdPatientEntries(req.params.id));
+    try {
+        const patient = patientService_1.default.getIdPatientEntries(req.params.id);
+        res.json(patient);
+    }
+    catch (e) {
+        res.status(400).send(e.message);
+    }
 });
 router.post('/', (req, res) => {
     try {

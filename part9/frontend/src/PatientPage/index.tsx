@@ -16,12 +16,27 @@ import { useStateValue } from "../state";
 
 const PatientPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [{ patients, diagnosis }, dispatch] = useStateValue();
+  const [{ diagnosis }, dispatch] = useStateValue();
   const [modalOpen, setModalOpen] = React.useState<boolean>(false);
   const [error, setError] = React.useState<string | undefined>();
-
+  const [patient, setPatient] = React.useState<Patient | undefined>();
   const openModal = (): void => setModalOpen(true);
-  const patient = Object.values(patients).find((patient: Patient) => patient.id === id);
+
+  React.useEffect(() => {
+    const fetchPatients = async () => {
+      try {
+        const { data: patientFromApi } = await axios.get<Patient>(
+          `${apiBaseUrl}/patients/${id}`
+        );
+        dispatch({ type: "SET_ENTRY", payload: patientFromApi.entries });
+        setPatient(patientFromApi);
+      } catch (e) {
+        console.error(e);
+      }
+    };
+    fetchPatients();
+  }, [modalOpen, dispatch, id]);
+
 
   const closeModal = (): void => {
     setModalOpen(false);
@@ -41,6 +56,7 @@ const PatientPage: React.FC = () => {
       setError(e.response.data.error);
     }
   };
+
 
   const transGender = (patient: Patient | undefined): SemanticICONS => {
     switch(patient?.gender){

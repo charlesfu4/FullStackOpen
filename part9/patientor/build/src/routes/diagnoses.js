@@ -7,12 +7,31 @@ const express_1 = __importDefault(require("express"));
 const diagnoseService_1 = __importDefault(require("../services/diagnoseService"));
 const router = express_1.default.Router();
 router.get('/', (_req, res) => {
-    res.send(diagnoseService_1.default.getEntries());
+    try {
+        const diagnosis = diagnoseService_1.default.getEntries();
+        res.send(diagnosis);
+    }
+    catch (e) {
+        res.json(400).send(e.message);
+    }
 });
 router.get('/:id', (req, res) => {
-    res.send(diagnoseService_1.default.getIdDiagnoseEntry(req.params.id));
+    try {
+        const diagnosis = diagnoseService_1.default.getIdDiagnoseEntry(req.params.id);
+        res.send(diagnosis);
+    }
+    catch (e) {
+        res.json(400).send(e.message);
+    }
 });
 router.get('/censored', (_req, res) => {
-    res.send(diagnoseService_1.default.getNonSensitiveDiagnoses());
+    try {
+        const diagnosis = diagnoseService_1.default.getNonSensitiveDiagnoses();
+        res.send(diagnosis);
+    }
+    catch (e) {
+        res.json(400).send(e.message);
+    }
+    res.send();
 });
 exports.default = router;
