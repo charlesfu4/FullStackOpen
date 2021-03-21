@@ -73,8 +73,10 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }: Props) => 
         healthCheckRating: 0
       }}
       onSubmit={onSubmit}
-      validate={values => {
+      validate={ values => {
         const requiredError = "Field is required";
+        const formatError = "Field is in wrong format";
+        const outofboundError = "Field ranges from 0 - 3";
         const errors: { [field: string]: string } = {};
         if (!values.description) {
           errors.description = requiredError;
@@ -82,8 +84,16 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }: Props) => 
         if (!values.date) {
           errors.date = requiredError;
         }
+        if(!Date.parse(values.date)){
+          errors.date = formatError;
+        }
         if (!values.specialist) {
           errors.specialist = requiredError;
+        }
+        if(values.type == "HealthCheck"){
+          if(values.healthCheckRating < 0 || values.healthCheckRating > 3){
+            errors.healthCheckRating = outofboundError;
+          }
         }
         return errors;
       }}

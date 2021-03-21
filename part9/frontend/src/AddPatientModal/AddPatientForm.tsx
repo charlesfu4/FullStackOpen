@@ -35,6 +35,7 @@ export const AddPatientForm: React.FC<Props> = ({ onSubmit, onCancel }: Props) =
       onSubmit={onSubmit}
       validate={values => {
         const requiredError = "Field is required";
+        const formatError = "Filed is in wrong format";
         const errors: { [field: string]: string } = {};
         if (!values.name) {
           errors.name = requiredError;
@@ -44,6 +45,9 @@ export const AddPatientForm: React.FC<Props> = ({ onSubmit, onCancel }: Props) =
         }
         if (!values.dateOfBirth) {
           errors.dateOfBirth = requiredError;
+        }
+        if(!Date.parse(values.dateOfBirth)){
+          errors.dateOfBirth = formatError;
         }
         if (!values.occupation) {
           errors.occupation = requiredError;
