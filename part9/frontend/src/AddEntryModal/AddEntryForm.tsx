@@ -90,7 +90,7 @@ export const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }: Props) => 
         if (!values.specialist) {
           errors.specialist = requiredError;
         }
-        if(values.type == "HealthCheck"){
+        if(values.type === "HealthCheck"){
           if(values.healthCheckRating < 0 || values.healthCheckRating > 3){
             errors.healthCheckRating = outofboundError;
           }

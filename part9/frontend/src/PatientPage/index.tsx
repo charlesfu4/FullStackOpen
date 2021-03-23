@@ -28,14 +28,13 @@ const PatientPage: React.FC = () => {
         const { data: patientFromApi } = await axios.get<Patient>(
           `${apiBaseUrl}/patients/${id}`
         );
-        dispatch({ type: "SET_ENTRY", payload: patientFromApi.entries });
         setPatient(patientFromApi);
       } catch (e) {
         console.error(e);
       }
     };
     fetchPatients();
-  }, [modalOpen, dispatch, id]);
+  }, [modalOpen, id]);
 
 
   const closeModal = (): void => {
@@ -45,11 +44,15 @@ const PatientPage: React.FC = () => {
 
   const submitNewEntry = async (values: NewEntry) => {
     try {
-      const { data: updatedPatient } = await axios.post<Patient>(
+      const { data: updatedEntry } = await axios.post<Entry>(
         `${apiBaseUrl}/patients/${patient?.id}/entries`,
         values
       );
-      dispatch({ type: "ADD_ENTRY", payload: updatedPatient });
+      patient?.entries.push(updatedEntry);
+      dispatch({ type: "ADD_ENTRY", payload: {
+        patientId: patient?.id as string,
+        patient: patient as Patient
+       }});
       closeModal();
     } catch (e) {
       console.error(e.response.data);

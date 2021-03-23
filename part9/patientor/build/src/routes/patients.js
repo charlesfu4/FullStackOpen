@@ -25,6 +25,7 @@ router.get('/:id', (req, res) => {
     catch (e) {
         res.status(400).send(e.message);
     }
+    res.send(patientService_1.default.getIdPatientEntries(req.params.id));
 });
 router.post('/', (req, res) => {
     try {
