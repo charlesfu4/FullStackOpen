@@ -1,4 +1,5 @@
 const { ApolloServer, gql } = require('apollo-server')
+const { v1: uuid } = require('uuid')
 
 let authors = [
   {
@@ -92,62 +93,74 @@ const typeDefs = gql`
     genres: [String!]!
   }
 
+  type Mutation {
+    addBook(
+      title: String!
+      published: Int!
+      author: String!
+      genres: [String!]!
+    ): Book
+  }
+
   type Author {
     name: String!
-    bookCount: Int!
+    born: Int
+    id: String!
+    bookCount: Int
   }
 
   type Query {
     bookCount: Int!
     authorCount: Int!
-    allBooks(author: String, genres: String): [Book!]!
+    allBooks(author: String, genre: String): [Book!]!
     allAuthors: [Author!]!
   }
 `
 
 const resolvers = {
+  Mutation: {
+    addBook: (root, args) => {
+      const newBook = {...args, id: uuid()}
+      books = books.concat(newBook)
+      if(!authors.find(a => a.name === newBook.author)){
+        authors = authors.concat({
+          name: newBook.author,
+          id: uuid()
+        })
+      }
+      return newBook
+    }
+  },
   Query: {
     bookCount: () => books.length,
-    authorCount: () => {
-      let authors =  books.reduce((allAuthors, book) => {
-        if(book.author in allAuthors)
-          allAuthors[book.author]++
-        else 
-          allAuthors[book.author] = 1
-        return allAuthors 
-      }, {})
-      return Object.keys(authors).length
-    },
+    authorCount: () => authors.length,
     allBooks: (root, args) => {
-      if(args.author && !args.genres){
+      if(args.author && !args.genre){
         return books.filter(b => b.author === args.author)
       }
-      else if(args.genres && !args.author){
-        return books.filter(b => b.genres.includes(args.genres))
+      else if(args.genre && !args.author){
+        return books.filter(b => b.genres.includes(args.genre))
       }
-      else if(args.genres && args.author){
+      else if(args.genre && args.author){
         const filterByAuthor = books.filter(b => b.author === args.author)
-        return filterByAuthor.filter(b => b.genres.includes(args.genres))
+        return filterByAuthor.filter(b => b.genres.includes(args.genre))
       }
       else{
         return books
       }
     },
     allAuthors: () => {
-      let authors =  books.reduce((allAuthors, book) => {
+      let authorsCounts = books.reduce((allAuthors, book) => {
         if(book.author in allAuthors)
           allAuthors[book.author]++
         else 
           allAuthors[book.author] = 1
         return allAuthors 
       }, {})
-      return Object.keys(authors).map(k => (
-          {
-            name: k,
-            bookCount: authors[k],
-          }
-        )
-      )
+      return authors.map(a => {
+        const count = authorsCounts[Object.keys(authorsCounts).find(k => k === a.name)]
+        return {...a, bookCount: count}
+      })
     }
   }
 }
