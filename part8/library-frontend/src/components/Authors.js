@@ -2,10 +2,15 @@
 import React, { useEffect, useState } from 'react'
 import { useQuery } from '@apollo/client'
 import { ALL_AUTHORS } from '../queries'
+import AuthorForm from './AuthorForm'
 
 const Authors = (props) => {
+  const [errorMessage, setErrorMessage] = useState(null)
   const [authors, setAuthors] = useState([])
-  const result = useQuery(ALL_AUTHORS)
+  const result = useQuery(ALL_AUTHORS, {
+    pollInterval: 2000
+  })
+
   useEffect(() => {
     if(result.data) {
       setAuthors(result.data.allAuthors)
@@ -14,6 +19,13 @@ const Authors = (props) => {
 
   if (!props.show) {
     return null
+  }
+
+  const notify = (message) => {
+    setErrorMessage(message)
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 10000)
   }
   
   return (
@@ -40,6 +52,7 @@ const Authors = (props) => {
         </tbody>
       </table>
 
+      <AuthorForm setError={notify} />
     </div>
   )
 }
