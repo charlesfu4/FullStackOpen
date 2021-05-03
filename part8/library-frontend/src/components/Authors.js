@@ -52,7 +52,7 @@ const Authors = (props) => {
         </tbody>
       </table>
 
-      <AuthorForm setError={notify} />
+      <AuthorForm setError={notify} authors={authors} />
     </div>
   )
 }
