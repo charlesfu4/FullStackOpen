@@ -1,4 +1,4 @@
-const { ApolloServer, gql } = require('apollo-server')
+const { ApolloServer, gql, UserInputError } = require('apollo-server')
 const { v1: uuid } = require('uuid')
 const mongoose = require('mongoose')
 const config = require('./utils/config') 
@@ -13,7 +13,6 @@ mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology
   .catch((error) => {
     console.log('error connecting to MongoDB:', error.message)
 })
-
 
 let authors = [
   {
@@ -35,6 +34,71 @@ let authors = [
     name: 'Sandi Metz', // birthyear not known
   },
 ]
+
+// save the authors data
+const authorObjects = authors.map(author => new Author(author))
+const promiseAuthors = authorObjects.map(author => author.save())
+Promise.all(promiseAuthors)
+
+/*
+ * Saattaisi olla järkevämpää assosioida kirja ja sen tekijä tallettamalla kirjan yhteyteen tekijän nimen sijaan tekijän id
+ * Yksinkertaisuuden vuoksi tallennamme kuitenkin kirjan yhteyteen tekijän nimen
+*/
+
+let books = [
+  {
+    title: 'Clean Code',
+    published: 2008,
+    author: 'Robert Martin',
+    genres: ['refactoring']
+  },
+  {
+    title: 'Agile software development',
+    published: 2002,
+    author: 'Robert Martin',
+    genres: ['agile', 'patterns', 'design']
+  },
+  {
+    title: 'Refactoring, edition 2',
+    published: 2018,
+    author: 'Martin Fowler',
+    genres: ['refactoring']
+  },
+  {
+    title: 'Refactoring to patterns',
+    published: 2008,
+    author: 'Joshua Kerievsky',
+    genres: ['refactoring', 'patterns']
+  },  
+  {
+    title: 'Practical Object-Oriented Design, An Agile Primer Using Ruby',
+    published: 2012,
+    author: 'Sandi Metz',
+    genres: ['refactoring', 'design']
+  },
+  {
+    title: 'Crime and punishment',
+    published: 1866,
+    author: 'Fyodor Dostoevsky',
+    genres: ['classic', 'crime']
+  },
+  {
+    title: 'The Demon ',
+    published: 1872,
+    author: 'Fyodor Dostoevsky',
+    genres: ['classic', 'revolution']
+  },
+]      
+
+// save the books data
+books.map(async book => {
+  const mappedAuthor = await Author.findOne({ name: book.author })
+  const saveAuthor = new Book({
+    ...book,
+    author: mappedAuthor
+  })
+  await saveAuthor.save()
+})
 
 const typeDefs = gql`
   type Book {
@@ -75,29 +139,55 @@ const typeDefs = gql`
 
 const resolvers = {
   Mutation: {
-    addBook: (root, args) => {
-      const newBook = {...args, id: uuid()}
-      books = books.concat(newBook)
-      if(!authors.find(a => a.name === newBook.author)){
-        authors = authors.concat({
-          name: newBook.author,
-          id: uuid()
+    addBook: async (root, args) => {
+      try {
+        const findAuthor = await Author.findOne({ name: args.author })
+        // author exists
+        if(findAuthor){
+          const newBook = new Book({
+            ...args,
+            author: findAuthor
+          }) 
+          await newBook.save()
+          return newBook
+        }
+        // author does not exist, we need to create a new author
+        else{
+          const newAuthor = new Author({ name: args.author })
+          await newAuthor.save()
+          const newBook = new Book({
+            ...args,
+            author: newAuthor
+          })
+          await newBook.save()
+          return newBook
+        }
+      } catch (error) {
+        throw new UserInputError(error.message, {
+          invalidArgs: args,
         })
       }
-      return newBook
     },
-    editAuthor: (root, args) => {
-      const updateAuthor = authors.find(a => a.name === args.name)
-      if(!updateAuthor) return null
+    editAuthor: async (root, args) => {
+      const author = await Author.findOne({ name: args.name })
+
+      if(!author) return null
       else {
-        authors = authors.map(a => a.name === args.name? {...updateAuthor, born: args.setBornTo}: a)
-        return {...updateAuthor, born: args.setBornTo}
+        author.born = args.setBornTo
+        try{
+          await author.save()
+          return author
+        } catch(error) {
+          throw new UserInputError(error.message, {
+            invalidArgs: args,
+          })
+        }
       }
     }
   },
   Query: {
-    bookCount: () => books.length,
-    authorCount: () => authors.length,
+    bookCount: () => Book.collection.countDocuments(),
+    authorCount: () => Author.collection.countDocuments(),
     allBooks: (root, args) => {
       if(args.author && !args.genre){
         return books.filter(b => b.author === args.author)
@@ -113,17 +203,19 @@ const resolvers = {
         return books
       }
     },
-    allAuthors: () => {
-      let authorsCounts = books.reduce((allAuthors, book) => {
+    allAuthors: async () => {
+      const bookCollections = await Book.find({})
+      const authorCollections = await Author.find({})
+      let authorsCounts = bookCollections.reduce((allAuthors, book) => {
         if(book.author in allAuthors)
           allAuthors[book.author]++
         else 
           allAuthors[book.author] = 1
         return allAuthors 
       }, {})
-      return authors.map(a => {
-        const count = authorsCounts[Object.keys(authorsCounts).find(k => k === a.name)]
-        return {...a, bookCount: count}
+      return authorCollections.map(a => {
+        const count = authorsCounts[Object.keys(authorsCounts).find(k => k === a._id.toString())]
+        return {name: a.name, bookCount: count}
       })
     }
   }
