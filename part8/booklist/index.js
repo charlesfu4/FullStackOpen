@@ -14,6 +14,7 @@ mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology
     console.log('error connecting to MongoDB:', error.message)
 })
 
+/*
 let authors = [
   {
     name: 'Robert Martin',
@@ -40,10 +41,6 @@ const authorObjects = authors.map(author => new Author(author))
 const promiseAuthors = authorObjects.map(author => author.save())
 Promise.all(promiseAuthors)
 
-/*
- * Saattaisi olla järkevämpää assosioida kirja ja sen tekijä tallettamalla kirjan yhteyteen tekijän nimen sijaan tekijän id
- * Yksinkertaisuuden vuoksi tallennamme kuitenkin kirjan yhteyteen tekijän nimen
-*/
 
 let books = [
   {
@@ -99,6 +96,7 @@ books.map(async book => {
   })
   await saveAuthor.save()
 })
+*/
 
 const typeDefs = gql`
   type Book {
@@ -146,10 +144,13 @@ const resolvers = {
         if(findAuthor){
           const newBook = new Book({
             ...args,
-            author: findAuthor
+            author: findAuthor._id
           }) 
           await newBook.save()
-          return newBook
+          return {
+            ...args,
+            author: findAuthor.name
+          } 
         }
         // author does not exist, we need to create a new author
         else{
@@ -157,10 +158,13 @@ const resolvers = {
           await newAuthor.save()
           const newBook = new Book({
             ...args,
-            author: newAuthor
+            author: newAuthor._id
           })
           await newBook.save()
-          return newBook
+          return {
+            ...args,
+            author: newAuthor.name
+          } 
         }
       } catch (error) {
         throw new UserInputError(error.message, {
