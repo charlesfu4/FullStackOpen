@@ -99,10 +99,17 @@ books.map(async book => {
 */
 
 const typeDefs = gql`
+  type Author {
+    name: String!
+    born: Int
+    id: String!
+    bookCount: Int
+  }
+
   type Book {
     title: String!
     published: Int!
-    author: String!
+    author: Author!
     id: ID!
     genres: [String!]!
   }
@@ -118,13 +125,6 @@ const typeDefs = gql`
       name: String!
       setBornTo: Int!
     ): Author 
-  }
-
-  type Author {
-    name: String!
-    born: Int
-    id: String!
-    bookCount: Int
   }
 
   type Query {
@@ -192,33 +192,38 @@ const resolvers = {
   Query: {
     bookCount: () => Book.collection.countDocuments(),
     authorCount: () => Author.collection.countDocuments(),
-    allBooks: (root, args) => {
+    allBooks: async (root, args) => {
+      const bookCollections = await Book.find({}).populate('author')
+      const literalAuthor = await Author.findOne({ name: args.author })
       if(args.author && !args.genre){
-        return books.filter(b => b.author === args.author)
+        const result =  bookCollections.filter(b => b.author === literalAuthor)
+        return result
       }
       else if(args.genre && !args.author){
-        return books.filter(b => b.genres.includes(args.genre))
+        const result = bookCollections.filter(b => b.genres.includes(args.genre))
+        return result
       }
       else if(args.genre && args.author){
-        const filterByAuthor = books.filter(b => b.author === args.author)
-        return filterByAuthor.filter(b => b.genres.includes(args.genre))
+        const filterByAuthor = books.filter(b => b.author === literalAuthor)
+        const result = filterByAuthor.filter(b => b.genres.includes(args.genre))
+        return result
       }
       else{
-        return books
+        return bookCollections 
       }
     },
     allAuthors: async () => {
-      const bookCollections = await Book.find({})
+      const bookCollections = await Book.find({}).populate('author')
       const authorCollections = await Author.find({})
       let authorsCounts = bookCollections.reduce((allAuthors, book) => {
-        if(book.author in allAuthors)
-          allAuthors[book.author]++
+        if(book.author.name in allAuthors)
+          allAuthors[book.author.name]++
         else 
-          allAuthors[book.author] = 1
+          allAuthors[book.author.name] = 1
         return allAuthors 
       }, {})
       return authorCollections.map(a => {
-        const count = authorsCounts[Object.keys(authorsCounts).find(k => k === a._id.toString())]
+        const count = authorsCounts[Object.keys(authorsCounts).find(k => k === a.name)]
         return {name: a.name, bookCount: count}
       })
     }
