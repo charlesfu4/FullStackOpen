@@ -2,16 +2,16 @@ const mongoose = require('mongoose')
 const uniqueValidator = require('mongoose-unique-validator')
 
 const schema = new mongoose.Schema({
-  name: {
+  username: {
     type: String,
-    required: true,
+    require: true,
     unique: true,
-    minlength: 4
   },
-  born: {
-    type: Number,
-  },
+  favoriteGenre: {
+    type: String,
+    require: true,
+  }
 })
 
 schema.plugin(uniqueValidator)
-module.exports = mongoose.model('Author', schema)
+module.exports = mongoose.model('User', schema)
