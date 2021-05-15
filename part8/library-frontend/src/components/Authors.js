@@ -5,7 +5,6 @@ import { ALL_AUTHORS } from '../queries'
 import AuthorForm from './AuthorForm'
 
 const Authors = (props) => {
-  const [errorMessage, setErrorMessage] = useState(null)
   const [authors, setAuthors] = useState([])
   const result = useQuery(ALL_AUTHORS, {
     pollInterval: 2000
@@ -20,21 +19,16 @@ const Authors = (props) => {
   if (!props.show) {
     return null
   }
-
-  const notify = (message) => {
-    setErrorMessage(message)
-    setTimeout(() => {
-      setErrorMessage(null)
-    }, 10000)
-  }
   
   return (
     <div>
-      <h2>authors</h2>
+      <h2>Authors</h2>
       <table>
         <tbody>
           <tr>
-            <th></th>
+            <th align="center">
+              name
+            </th>
             <th>
               born
             </th>
@@ -43,7 +37,7 @@ const Authors = (props) => {
             </th>
           </tr>
           {authors.map(a =>
-            <tr key={a.name}>
+            <tr key={a.name} align="center">
               <td>{a.name}</td>
               <td>{a.born}</td>
               <td>{a.bookCount}</td>
@@ -52,7 +46,7 @@ const Authors = (props) => {
         </tbody>
       </table>
 
-      <AuthorForm setError={notify} authors={authors} />
+      <AuthorForm setError={props.setError} authors={authors} />
     </div>
   )
 }

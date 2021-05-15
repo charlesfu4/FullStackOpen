@@ -7,7 +7,11 @@ const AuthorForm = ({ setError, authors }) => {
   const [setBornTo, setSetBornTo] = useState(0)
   const [allauthors, setAllauthors] = useState([])
 
-  const [ changeBd, result ] = useMutation(EDIT_AUTHOR)
+  const [ changeBd, result ] = useMutation(EDIT_AUTHOR, {
+    onError: (err) => {
+      setError(err.graphQLErrors[0].message)
+    }
+  })
 
   const submit = (event) => {
     event.preventDefault()

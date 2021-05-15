@@ -18,12 +18,14 @@ const Books = (props) => {
 
   return (
     <div>
-      <h2>books</h2>
+      <h2>Books</h2>
 
       <table>
         <tbody>
-          <tr>
-            <th></th>
+          <tr align="left">
+            <th>
+              title
+            </th>
             <th>
               author
             </th>
@@ -32,9 +34,9 @@ const Books = (props) => {
             </th>
           </tr>
           {books.map(a =>
-            <tr key={a.title}>
+            <tr key={a.title} align="left">
               <td>{a.title}</td>
-              <td>{a.author}</td>
+              <td>{a.author.name}</td>
               <td>{a.published}</td>
             </tr>
           )}

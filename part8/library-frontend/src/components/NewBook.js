@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { ALL_AUTHORS, ALL_BOOKS, CREATE_BOOK } from '../queries'
 
-const NewBook = (props) => {
+const NewBook = ({ show, setError }) => {
   const [title, setTitle] = useState('')
   const [author, setAuhtor] = useState('')
   const [published, setPublished] = useState('')
@@ -11,9 +11,12 @@ const NewBook = (props) => {
 
   const [ createBook ] = useMutation(CREATE_BOOK, {
     refetchQueries: [ { query: ALL_BOOKS }, { query: ALL_AUTHORS } ], 
+    onError: (err) => {
+      setError(err.graphQLErrors[0].message)
+    }
   })
 
-  if (!props.show) {
+  if (!show) {
     return null
   }
 
@@ -36,6 +39,7 @@ const NewBook = (props) => {
 
   return (
     <div>
+      <h2>Add new book</h2>
       <form onSubmit={submit}>
         <div>
           title
