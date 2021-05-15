@@ -282,7 +282,11 @@ const resolvers = {
       }, {})
       return authorCollections.map(a => {
         const count = authorsCounts[Object.keys(authorsCounts).find(k => k === a.name)]
-        return {name: a.name, bookCount: count}
+        return {
+          name: a.name,
+          born: a.born,
+          bookCount: count
+        }
       })
     },
     me: (root, args, context) => {
