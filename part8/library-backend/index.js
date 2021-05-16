@@ -1,9 +1,9 @@
-const { ApolloServer, gql, UserInputError, AuthenticationError, PubSub } = require('apollo-server')
+const { ApolloServer, gql, UserInputError, AuthenticationError } = require('apollo-server')
+const { PubSub } = require('apollo-server')
 const { v1: uuid } = require('uuid')
 const jwt = require('jsonwebtoken')
 const mongoose = require('mongoose')
 const config = require('./utils/config') 
-const pubsub = new PubSub()
 
 const Author = require('./models/author')
 const Book = require('./models/book')
@@ -12,6 +12,7 @@ const User = require('./models/user')
 const JWT_SECRET = config.JWT_SECRET
 const MONGODB_URI = config.MONGODB_URI
 const PASSWORD = config.PASSWORD
+const pubsub = new PubSub()
 
 mongoose.connect(MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true, useFindAndModify: false, useCreateIndex: true })
   .then(() => {
@@ -181,10 +182,7 @@ const resolvers = {
             author: findAuthor._id
           }) 
           await newBook.save()
-          pubsub.publish('BOOK_ADDED', { bookAdded: {
-            ...args,
-            author: findAuthor
-           }})
+          pubsub.publish('BOOK_ADDED', { bookAdded: newBook })
           return {
             ...args,
             author: findAuthor
@@ -199,10 +197,7 @@ const resolvers = {
             author: newAuthor._id
           })
           await newBook.save()
-          pubsub.publish('BOOK_ADDED', { bookAdded: {
-            ...args,
-            author: newAuthor
-          }})
+          pubsub.publish('BOOK_ADDED', { bookAdded: newBook })
           return {
             ...args,
             author: newAuthor
@@ -260,11 +255,6 @@ const resolvers = {
       return { value: jwt.sign(userForToken, JWT_SECRET) }
     }
   },
-  Subscription: {
-    bookAdded: {
-      subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
-    }
-  },
   Query: {
     bookCount: () => Book.collection.countDocuments(),
     authorCount: () => Author.collection.countDocuments(),
@@ -310,7 +300,12 @@ const resolvers = {
     me: (root, args, context) => {
       return context.currentUser
     }
-  }
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubsub.asyncIterator(['BOOK_ADDED'])
+    }
+  },
 }
 
 const server = new ApolloServer({
