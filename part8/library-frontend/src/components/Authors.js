@@ -6,9 +6,7 @@ import AuthorForm from './AuthorForm'
 
 const Authors = (props) => {
   const [authors, setAuthors] = useState([])
-  const result = useQuery(ALL_AUTHORS, {
-    pollInterval: 2000
-  })
+  const result = useQuery(ALL_AUTHORS)
 
   useEffect(() => {
     if(result.data) {

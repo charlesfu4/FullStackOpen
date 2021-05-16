@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useMutation } from '@apollo/client'
-import { EDIT_AUTHOR } from '../queries'
+import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries'
 
 const AuthorForm = ({ setError, authors }) => {
   const [name, setName] = useState('')
@@ -10,6 +10,20 @@ const AuthorForm = ({ setError, authors }) => {
   const [ changeBd, result ] = useMutation(EDIT_AUTHOR, {
     onError: (err) => {
       setError(err.graphQLErrors[0].message)
+    },
+    update: (store, response) => {
+      const dataInStore = store.readQuery({ query: ALL_AUTHORS })
+      store.writeQuery({
+        query: ALL_AUTHORS,
+        data:{
+          ...dataInStore,
+          allAuthors: dataInStore.allAuthors.map( author => 
+            author.name === response.data.editAuthor.name ?
+            response.data.editAuthor :
+            author
+          ) 
+        }
+      })
     }
   })
 
