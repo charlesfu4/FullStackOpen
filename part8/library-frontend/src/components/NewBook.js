@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useMutation } from '@apollo/client'
-import { ALL_AUTHORS, ALL_BOOKS, CREATE_BOOK } from '../queries'
+import { CREATE_BOOK } from '../queries'
 
-const NewBook = ({ show, setError }) => {
+const NewBook = ({ show, setError, updateCacheWith }) => {
   const [title, setTitle] = useState('')
   const [author, setAuhtor] = useState('')
   const [published, setPublished] = useState('')
@@ -13,26 +13,6 @@ const NewBook = ({ show, setError }) => {
     onError: (err) => {
       setError(err.graphQLErrors[0].message)
     },
-    update: (store, response) => {
-      // update book store
-      const booksInStore = store.readQuery({ query: ALL_BOOKS })
-      store.writeQuery({
-        query: ALL_BOOKS,
-        data: {
-          ...booksInStore,
-          allBooks: [ ...booksInStore.allBooks, response.data.addBook ]
-        }
-      })
-      // update author store 
-      const authorsInStore = store.readQuery({ query: ALL_AUTHORS })
-      store.writeQuery({
-        query: ALL_AUTHORS,
-        data: {
-          ...authorsInStore,
-          allAuthors: [ ...authorsInStore.allAuthors, response.data.addBook.author ]
-        }
-      })
-    }
   })
 
   if (!show) {

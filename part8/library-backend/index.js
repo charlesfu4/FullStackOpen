@@ -171,43 +171,38 @@ const resolvers = {
     addBook: async (root, args, context) => {
       const findAuthor = await Author.findOne({ name: args.author })
       const currentUser = context.currentUser
+      const newAuthor = new Author({ name: args.author })
       if(!currentUser) {
         throw new AuthenticationError('Please login first!')
       }
-      try {
-        // author exists
-        if(findAuthor){
-          const newBook = new Book({
-            ...args,
-            author: findAuthor._id
-          }) 
-          await newBook.save()
-          pubsub.publish('BOOK_ADDED', { bookAdded: newBook })
-          return {
-            ...args,
-            author: findAuthor
-          } 
-        }
-        // author does not exist, we need to create a new author
-        else{
-          const newAuthor = new Author({ name: args.author })
+      if(!findAuthor){
+        try {
           await newAuthor.save()
-          const newBook = new Book({
-            ...args,
-            author: newAuthor._id
+        } catch (error) {
+          throw new UserInputError(error.message, {
+            invalidArgs: args,
           })
-          await newBook.save()
-          pubsub.publish('BOOK_ADDED', { bookAdded: newBook })
-          return {
-            ...args,
-            author: newAuthor
-          } 
         }
+      }
+      const savedAuthor = findAuthor ? findAuthor : newAuthor
+      
+      const newBook = new Book({
+        ...args,
+        author: savedAuthor._id
+      })
+      const returnedBook = new Book({
+        ...args,
+        author: savedAuthor
+      })
+      try {
+        await newBook.save()
       } catch (error) {
         throw new UserInputError(error.message, {
           invalidArgs: args,
         })
       }
+      pubsub.publish('BOOK_ADDED', { bookAdded: returnedBook })
+      return returnedBook 
     },
     editAuthor: async (root, args, context) => {
       const author = await Author.findOne({ name: args.name })
