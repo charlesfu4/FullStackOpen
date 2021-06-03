@@ -41,8 +41,9 @@ const Blog = ({ blog }) => {
   }
   // determine if remove button will appear
   const removeButton = (targetedBlog) => {
+    console.log(targetedBlog)
     return loginUser.username === targetedBlog.user.username ?
-      <Button variant="danger" onClick={() => removeBlog(targetedBlog.id)}>remove</Button>:
+      <Button variant="danger" onClick={() => removeBlog(targetedBlog.id)} data-cy='remove-button'>remove</Button>:
       null
   }
 
@@ -51,7 +52,7 @@ const Blog = ({ blog }) => {
   }
 
   return(
-    <div className='singleBlog'>
+    <div className='singleBlog' data-cy='single-blog'>
         <div>
           <h3>{blog.title}</h3>
           <Table striped bordered hover>
@@ -72,8 +73,8 @@ const Blog = ({ blog }) => {
               </tr> 
             </tbody>
           </Table>
-          <div>
-            {blog.likes} likes <Button onClick={() => updateLikes(id)} variant="success">like</Button>
+          <div data-cy='blog-likes'>
+            {blog.likes} likes <Button onClick={() => updateLikes(id)} variant="success" data-cy='like-button'>like</Button>
           </div>
           <div style={paddingTop}>
             {removeButton(blog)}

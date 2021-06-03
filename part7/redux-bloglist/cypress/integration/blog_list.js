@@ -55,9 +55,9 @@ describe('Blog app', function() {
       cy.getBySel('create-blog-button').click()
       
       // blog list
-      cy.getBySel('blog-list').contains('test-title')
-      cy.getBySel('blog-list').contains('test-author')
-      cy.getBySel('blog-list').contains('test-url')
+      cy.getBySel('blog-list').contains('test-title').click()
+      cy.contains('test-author')
+      cy.contains('test-url')
       
     })
 
@@ -71,7 +71,7 @@ describe('Blog app', function() {
       })
 
       // press the view and then like button twice 
-      cy.getBySel('blog-list').contains('view').click()
+      cy.getBySel('blog-list').contains('test-title').click()
       cy.getBySel('like-button').click()
       cy.getBySel('blog-likes').contains(1)
       cy.getBySel('like-button').click()
@@ -88,14 +88,12 @@ describe('Blog app', function() {
           url: 'test-url'
         })
         // press the view and then like button twice 
-        cy.getBySel('blog-list').contains('view').click()
+        cy.getBySel('blog-list').contains('test-title').click()
         cy.getBySel('remove-button').click()
 
 
         // disaapear from blog list
         cy.getBySel('blog-list').should('not.contain','test-title')
-        cy.getBySel('blog-list').should('not.contain','test-author')
-        cy.getBySel('blog-list').should('not.contain','test-url')
       })
 
       it('User who did not create the blog cannot delete it', function(){
@@ -111,8 +109,8 @@ describe('Blog app', function() {
         cy.login({username:'pmfm', password:'iampaula'})
 
         // press view and remove is not avalible
-        cy.getBySel('blog-list').contains('view').click()
-        cy.getBySel('blog-list').should('not.contain', 'remove')
+        cy.getBySel('blog-list').contains('test-title').click()
+        cy.getBySel('single-blog').should('not.contain', 'remove')
       })
     })
 
