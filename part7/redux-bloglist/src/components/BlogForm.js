@@ -35,18 +35,21 @@ const BlogForm = () => {
             <Form.Control
               type='text'
               name='title'
+              data-cy='title-input'
             />
           <Form.Label>author:</Form.Label>
             <Form.Control
               type='text'
               name='author'
+              data-cy='author-input'
             />
           <Form.Label>url:</Form.Label>
             <Form.Control
               type='text'
               name='url'
+              data-cy='url-input'
             />
-          <Button variant="primary" type='submit'>create</Button>
+          <Button variant="primary" type='submit' data-cy='create-blog-button'>create</Button>
         </Form.Group>
       </Form>
     </div>

@@ -35,8 +35,8 @@ describe('Blog app', function() {
       cy.getBySel('password').type('wrongofcourse')
       cy.getBySel('login-button').click()
 
-      cy.getBySel('error-noti').contains('Wrong username or password')
-      cy.getBySel('error-noti').should('have.css', 'color', 'rgb(255, 0, 0)')
+      cy.getBySel('noti').contains('Wrong username or password')
+      cy.getBySel('noti').should('have.css', 'color', 'rgb(33, 37, 41)')
       
     })
   })
@@ -117,7 +117,7 @@ describe('Blog app', function() {
     })
 
   })
-  describe.only('sort blogs', function() {
+  describe('sort blogs', function() {
     beforeEach(function() {
       cy.login({username:'ccfu', password:'iamcharlesfu'})
       cy.createBlog({

@@ -18,14 +18,17 @@ const Notification = () => {
   }
   else{
     return (
-      returnedState.error ?
-        <Alert variant="danger">
-          {JSON.stringify(returnedState.notification)}
-        </Alert>
-        :
-        <Alert variant="success">
-          {returnedState.notification}
-        </Alert>
+      <div data-cy='noti'>
+        {returnedState.error ?
+          <Alert variant="danger">
+            {JSON.stringify(returnedState.notification)}
+          </Alert>
+          :
+          <Alert variant="success">
+            {returnedState.notification}
+          </Alert>
+        }
+      </div>
     )
   }
 

@@ -77,7 +77,7 @@ const App = () => {
         <div>
           <Navtop user={loginUser} handleOnClick={handleLogout}/>
           <Notification />
-          <h1>blogs</h1>
+          <h1>Blogs</h1>
           <Switch>
             {blog
               ?

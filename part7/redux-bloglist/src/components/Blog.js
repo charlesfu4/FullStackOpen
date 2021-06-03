@@ -92,11 +92,14 @@ const Blog = ({ blog }) => {
           <Table striped bordered hover size="sm">
             <tbody>
               {
+                blog.comments ? 
                 blog.comments.map((comment, i) => (
                   <tr key={i}>
                     <td>{comment}</td>
                   </tr>
                 ))
+                :
+                null
               }
             </tbody>
           </Table>

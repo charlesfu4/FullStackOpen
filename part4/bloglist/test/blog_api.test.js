@@ -226,6 +226,7 @@ describe('update of a note', () => {
       author: blogToUpdate.author,
       url: blogToUpdate.url,
       likes: 100,
+      user: user,
     }
 
     await api
@@ -237,6 +238,8 @@ describe('update of a note', () => {
     expect(endBlog[0].likes).toBe(100)
   })
   test('update return 401 when token not provided', async () => {
+    const usr = await helper.usersInDb()[0]
+
     const blogsAtStart = await helper.blogsInDb()
     const blogToUpdate = blogsAtStart[0]
     const blogId = blogToUpdate.id
@@ -245,6 +248,7 @@ describe('update of a note', () => {
       author: blogToUpdate.author,
       url: blogToUpdate.url,
       likes: 100,
+      user: usr
     }
 
     await api

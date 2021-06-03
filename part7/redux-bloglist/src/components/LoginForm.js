@@ -1,4 +1,5 @@
 import React from 'react'
+import Notification from './Notification'
 import { useDispatch } from 'react-redux'
 import { setUser } from '../reducers/loginReducer' 
 import { addNotification } from '../reducers/notificationReducer'
@@ -47,6 +48,7 @@ const LoginForm = () => {
             data-cy='password'
           />
         <Button variant="success" type='submit' data-cy='login-button'>login</Button>
+        <Notification/>
       </Form.Group>
     </Form>
   )
